@@ -370,9 +370,9 @@ const type_effectiveness =
 class Type {
     static all_types = {};
 
-    constructor(name) {
-        this.name = name;
-        this.efficacite = type_effectiveness[name];
+    constructor(nom) {
+        this.nom = nom;
+        this.efficacite = type_effectiveness[nom];
     }
 
     toString() {
@@ -394,7 +394,7 @@ class Type {
             }
             efficatiteCommun.push(coeff[i] + " = [" + typeParCoeff.join(", ") + "]");
         }
-        return this.name + " : " + efficatiteCommun.join(", ");
+        return this.nom + " : " + efficatiteCommun.join(", ");
     }
 }
 
