@@ -385,13 +385,14 @@ class Type {
             }
         }
         
-        for (let nomtype in this.efficacite) {
-            for (let i = 0; i < coeff.length; i++) {
-                if (this.efficacite[nomtype] === coeff[i]) {
-                    efficatiteCommun.push("[ " + nomtype + " ]");
+        for (let i = 0; i < coeff.length; i++) {
+            let typeParCoeff = [];
+            for (let nomtype in this.efficacite) {
+                if (this.efficacite[nomtype] == coeff[i]) {
+                    typeParCoeff.push(nomtype);
                 }
             }
-            
+            efficatiteCommun.push(coeff[i] + " = [" + typeParCoeff.join(", ") + "]");
         }
         return this.name + " : " + efficatiteCommun.join(", ");
     }
