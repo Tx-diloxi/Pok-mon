@@ -379,19 +379,28 @@ class Type {
         let efficatiteCommun = [];
         let coeff = [];
 
+        //on récupère tous les coefficients d'efficacité distincts
         for(let nomtype in this.efficacite) {
             if (!coeff.includes(this.efficacite[nomtype])) {
                 coeff.push(this.efficacite[nomtype]);
             }
         }
 
+        //on trie les coefficients par ordre décroissant
+        coeff.sort(function(a, b){return b-a});
+
+        //on associe à chaque coefficient les types correspondants
         for (let i = 0; i < coeff.length; i++) {
             let typeParCoeff = [];
+            //on parcourt tous les types pour trouver ceux qui ont le coefficient d'efficacité actuel
             for (let nomtype in this.efficacite) {
+                //on vérifie si le coefficient d'efficacité du type correspond au coefficient actuel
                 if (this.efficacite[nomtype] == coeff[i]) {
+                    //on ajoute le type à la liste des types correspondants à ce coefficient
                     typeParCoeff.push(nomtype);
                 }
             }
+            //on ajoute à la liste d'efficacité commune le coefficient et les types correspondants
             efficatiteCommun.push(coeff[i] + " = [" + typeParCoeff.join(", ") + "]");
         }
         return this.nom + " : " + efficatiteCommun.join(", ");
