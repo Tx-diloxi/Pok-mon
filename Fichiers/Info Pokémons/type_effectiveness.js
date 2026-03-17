@@ -373,6 +373,8 @@ class Type {
     constructor(nom) {
         this.nom = nom;
         this.efficacite = type_effectiveness[nom];
+        
+        Type.all_types[nom] = this;
     }
 
     toString() {
@@ -407,5 +409,16 @@ class Type {
     }
 }
 
+//à partir de la source de données, crée des objets Type stockez dans all_types.
+function fill_types() {
+    for (let nomtype in type_effectiveness) {
+        new Type(nomtype);
+    }
+}
+fill_types();
 
+//test la fonction fill_types avec un exemple de type
+console.log(Type.all_types["Bug"].toString());
+
+//test la methode toString() avec un exemple de type
 console.log(new Type("Bug").toString());
