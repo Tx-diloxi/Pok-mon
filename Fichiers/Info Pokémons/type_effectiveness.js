@@ -376,8 +376,13 @@ class Type {
     }
 
     toString() {
-        
+        return this.name;
     }
 }
 
-console.log(new Type("Fire").toString());
+for (const typeName in type_effectiveness) {
+    Type.all_types[typeName] = new Type(typeName);
+}
+
+// console.log(new Type("Fire").toString());
+// console.log(Type.all_types);
