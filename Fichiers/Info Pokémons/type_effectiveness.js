@@ -385,6 +385,7 @@ class Type {
             }
         }
         
+        
         for (let i = 0; i < coeff.length; i++) {
             let typeParCoeff = [];
             for (let nomtype in this.efficacite) {
