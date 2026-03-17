@@ -368,7 +368,7 @@ const type_effectiveness =
 //console.log(type_effectiveness["Fire"]);
 
 class Type {
-    static all_types = [];
+    static all_types = {};
 
     constructor(name) {
         this.name = name;
@@ -399,4 +399,4 @@ class Type {
 }
 
 
-console.log(new Type("Fire").toString());
+console.log(new Type("Bug").toString());
