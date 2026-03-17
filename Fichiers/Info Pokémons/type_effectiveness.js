@@ -368,7 +368,7 @@ const type_effectiveness =
 //console.log(type_effectiveness["Fire"]);
 
 class Type {
-    static all_types = {};
+    static all_types = [];
 
     constructor(name) {
         this.name = name;
