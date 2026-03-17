@@ -365,24 +365,37 @@ const type_effectiveness =
 
 
 //console.table(type_effectiveness);
-// console.log(type_effectiveness["Fire"]);
+//console.log(type_effectiveness["Fire"]);
 
 class Type {
     static all_types = {};
 
     constructor(name) {
         this.name = name;
-        this.effectiveness = type_effectiveness[name];
+        this.efficacite = type_effectiveness[name];
     }
 
     toString() {
-        return this.name;
+        let efficatiteCommun = [];
+        let coeff = [];
+
+        for(let nomtype in this.efficacite) {
+            if (!coeff.includes(this.efficacite[nomtype])) {
+                coeff.push(this.efficacite[nomtype]);
+            }
+        }
+        
+        for (let nomtype in this.efficacite) {
+            for (let i = 0; i < coeff.length; i++) {
+                if (this.efficacite[nomtype] === coeff[i]) {
+                    efficatiteCommun.push("[ " + nomtype + " ]");
+                }
+            }
+            
+        }
+        return this.name + " : " + efficatiteCommun.join(", ");
     }
 }
 
-for (const typeName in type_effectiveness) {
-    Type.all_types[typeName] = new Type(typeName);
-}
 
-// console.log(new Type("Fire").toString());
-// console.log(Type.all_types);
+console.log(new Type("Fire").toString());
