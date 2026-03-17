@@ -1771,3 +1771,6 @@ const charged_moves =
             "type": "Flying"
         }
     ];
+
+
+export default charged_moves;
