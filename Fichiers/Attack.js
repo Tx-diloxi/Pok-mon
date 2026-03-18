@@ -5,12 +5,16 @@ import fast_moves from "./Info Pokémons/fast_moves.js";
 import charged_moves from "./Info Pokémons/charged_moves.js";
 
 class Attack {
+    static all_attacks = {};
+
     constructor(nom, idAttaque, type, puissance, duree) {
         this.nom = nom;
         this.idAttaque = idAttaque;
         this.type = type;
         this.puissance = puissance;
         this.duree = duree;
+
+        Attack.all_attacks[nom] = this;
     }
 
     toString() {
@@ -18,5 +22,20 @@ class Attack {
     }
 }
 
+function fill_attacks() {
+    for (let i = 0; i < fast_moves.length; i++) {
+        let move = fast_moves[i];
+        new Attack(move.name, move.move_id, move.type, move.power, move.duration);
+    }
+    for (let i = 0; i < charged_moves.length; i++) {
+        let move = charged_moves[i];
+        new Attack(move.name, move.move_id, move.type, move.power, move.duration);
+    }
+}
+fill_attacks();
 
+//test la fonction fill_attacks avec un exemple d'attaque
+console.log(Attack.all_attacks["Tackle"].toString());
+
+//test la methode toString() avec un exemple d'attaque
 console.log(new Attack("Tackle", 221, "Normal", 5, 500).toString());
