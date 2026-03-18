@@ -38,10 +38,12 @@ function fill_attacks() {
 fill_attacks();
 
 //test la fonction fill_attacks
-console.table(Attack.all_attacks);
+//console.table(Attack.all_attacks);
 
 //test la methode toString() avec un exemple d'attaque
-console.log(new Attack("Test", 999, "test", 999, 0.1).toString());
+//console.log(new Attack("Test", 999, "test", 999, 0.1).toString());
 
 //test après ajout d'une attaque personnalisée
-console.table(Attack.all_attacks);
+//console.table(Attack.all_attacks);
+
+export default Attack;
