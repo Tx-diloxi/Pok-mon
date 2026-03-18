@@ -35,10 +35,17 @@ class Pokemon {
     }
 
     getAttacks() {
-        let attaques = this.nomAttaqueRapides.concat(this.nomAttaqueChargees);  
+        let attaques = this.nomAttaqueRapides.concat(this.nomAttaqueChargees);
+
         for (let i = 0; i < attaques.length; i++) {
-            attaques[i] = Attack.all_attacks[attaques[i]];
+            let nomAttaque = attaques[i];
+            for (let attaque in Attack.all_attacks) {
+                if (Attack.all_attacks[attaque].nom === nomAttaque) {
+                    attaques[i] = Attack.all_attacks[attaque];
+                }
+            }
         }
+
         return attaques;
     }
 }
@@ -46,7 +53,7 @@ class Pokemon {
 //console.table(Pokemon.all_pokemons);
 
 
-console.log(new Pokemon("Bulbasaur").toString());
+console.table(new Pokemon("Bulbasaur").toString());
 
 
 console.table(new Pokemon("Bulbasaur").getAttacks());
