@@ -35,7 +35,7 @@ class Pokemon {
     }
 
     getAttacks() {
-        let attaques = this.nomAttaqueRapides + this.nomAttaqueChargees;  
+        let attaques = this.nomAttaqueRapides.concat(this.nomAttaqueChargees);  
         for (let i = 0; i < attaques.length; i++) {
             attaques[i] = Attack.all_attacks[attaques[i]];
         }
@@ -49,4 +49,4 @@ class Pokemon {
 console.log(new Pokemon("Bulbasaur").toString());
 
 
-console.log(new Pokemon("Bulbasaur").getAttacks());
+console.table(new Pokemon("Bulbasaur").getAttacks());
