@@ -16,23 +16,22 @@ class Pokemon {
         let lesAttauquesDuPokemon = pokemon_moves.find(p => p.pokemon_name == nom && p.form == "Normal");
         
         
-
-        this.nom = nom;
         this.idPokemon = lesInfosDuPokemon.pokemon_id;
+        this.nom = nom;
+        this.stamina = lesInfosDuPokemon.base_stamina;
         this.base_attaque = lesInfosDuPokemon.base_attack;
         this.base_defense = lesInfosDuPokemon.base_defense;
-        this.stamina = lesInfosDuPokemon.base_stamina;
+        
+        this.nomTypes = lesTypesDuPokemon.type.map(type => Type.all_types[type]);
 
-        this.types = lesTypesDuPokemon.type.map(type => Type.all_types[type]);
-
-        this.attaqueRapides = lesAttauquesDuPokemon.fast_moves;
-        this.attaqueChargees = lesAttauquesDuPokemon.charged_moves;
+        this.nomAttaqueRapides = lesAttauquesDuPokemon.fast_moves;
+        this.nomAttaqueChargees = lesAttauquesDuPokemon.charged_moves;
 
         Pokemon.all_pokemons[this.idPokemon] = this;
     }
 
     toString() {
-        return this.nom + " : #" + this.idPokemon + ", [Normal] , [STA: " + this.stamina + ", ATK: " + this.base_attaque + ", DEF: " + this.base_defense + "], Rapides = [" + this.attaqueRapides.join(", ") + "], Chargées = [" + this.attaqueChargees.join(", ") + "]";
+        return this.nom + " : #" + this.idPokemon + ", [Normal] , [STA: " + this.stamina + ", ATK: " + this.base_attaque + ", DEF: " + this.base_defense + "], Rapides = [" + this.nomAttaqueRapides.join(", ") + "], Chargées = [" + this.nomAttaqueChargees.join(", ") + "]";
     }
 }
 
