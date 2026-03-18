@@ -6,7 +6,7 @@ import charged_moves from "./Info Pokémons/charged_moves.js";
 
 class Attack {
     static all_attacks = {};
-
+    
     constructor(nom, idAttaque, type, puissance, duree) {
         this.nom = nom;
         this.idAttaque = idAttaque;
