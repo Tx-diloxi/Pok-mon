@@ -11,9 +11,9 @@ class Pokemon {
 
     constructor(nom) {
 
-        const lesInfosDuPokemon = pokemons.find(p => p.pokemon_name == nom && p.form == "Normal");
-        const lesTypesDuPokemon = pokemon_types.find(p => p.pokemon_name == nom && p.form == "Normal");
-        const lesAttauquesDuPokemon = pokemon_moves.find(p => p.pokemon_name == nom && p.form == "Normal");
+        let lesInfosDuPokemon = pokemons.find(p => p.pokemon_name == nom && p.form == "Normal");
+        let lesTypesDuPokemon = pokemon_types.find(p => p.pokemon_name == nom && p.form == "Normal");
+        let lesAttauquesDuPokemon = pokemon_moves.find(p => p.pokemon_name == nom && p.form == "Normal");
         
         
 
