@@ -1,5 +1,3 @@
-import pokemons from "./Info Pokémons/pokemons.js";
-
 class Pokemon {
     static all_pokemons = {};
 
@@ -20,4 +18,4 @@ class Pokemon {
     }
 }
 
-console.table(pokemons);
+console.table(Pokemon.all_pokemons);
