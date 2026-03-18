@@ -34,6 +34,10 @@ class Pokemon {
         return this.nom + " : #" + this.idPokemon + ", [Normal] , [STA: " + this.stamina + ", ATK: " + this.base_attaque + ", DEF: " + this.base_defense + "], Rapides = [" + this.nomAttaqueRapides.join(", ") + "], Chargées = [" + this.nomAttaqueChargees.join(", ") + "]";
     }
 
+    getTypes() {
+        return this.nomTypes;
+    }
+
     getAttacks() {
         let attaques = this.nomAttaqueRapides.concat(this.nomAttaqueChargees);
 
@@ -55,5 +59,6 @@ class Pokemon {
 
 console.table(new Pokemon("Bulbasaur").toString());
 
+console.table(new Pokemon("Bulbasaur").getTypes());
 
 console.table(new Pokemon("Bulbasaur").getAttacks());
