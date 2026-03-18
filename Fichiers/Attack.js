@@ -23,10 +23,13 @@ class Attack {
 }
 
 function fill_attacks() {
+    //on parcourt les listes d'attaques rapides pour créer des Attack et les stocker dans all_attacks
     for (let i = 0; i < fast_moves.length; i++) {
         let move = fast_moves[i];
         new Attack(move.name, move.move_id, move.type, move.power, move.duration);
     }
+
+    //on parcourt les listes d'attaques chargées pour créer des Attack et les stocker dans all_attacks
     for (let i = 0; i < charged_moves.length; i++) {
         let move = charged_moves[i];
         new Attack(move.name, move.move_id, move.type, move.power, move.duration);
@@ -38,4 +41,4 @@ fill_attacks();
 console.log(Attack.all_attacks["Tackle"].toString());
 
 //test la methode toString() avec un exemple d'attaque
-console.log(new Attack("Tackle", 221, "Normal", 5, 500).toString());
+console.log(new Attack("Test", 999, "test", 999, 0.1).toString());
