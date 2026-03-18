@@ -10,23 +10,28 @@ class Pokemon {
     static all_pokemons = {};
 
     constructor(nom) {
-        this.nom = nom;
-        const pokemonData = pokemons.find(p => p.pokemon_name === nom && p.form === "Normal") || pokemons.find(p => p.pokemon_name === nom);
-        const pokemonTypeData = pokemon_types.find(p => p.pokemon_name === nom && p.form === "Normal") || pokemon_types.find(p => p.pokemon_name === nom);
-        this.idPokemon = pokemonData.pokemon_id;
-        this.base_attaque = pokemonData.base_attack;
-        this.base_defense = pokemonData.base_defense;
-        this.stamina = pokemonData.base_stamina;
-        this.types = pokemonTypeData.type.map(type => Type.all_types[type]);
+
+        const TEST = pokemons.find(p => p.pokemon_name == nom && p.form == "Normal");
+        const TYPE = pokemon_types.find(p => p.pokemon_name == nom && p.form == "Normal");
+        const MOVE = pokemon_moves.find(p => p.pokemon_name == nom && p.form == "Normal");
         
-        const pokemonMovesData = pokemon_moves.find(p => p.pokemon_name === nom && p.form === "Normal") || pokemon_moves.find(p => p.pokemon_name === nom);
-        this.attacks = (pokemonMovesData ? (pokemonMovesData.charged_moves.concat(pokemonMovesData.fast_moves)) : []).map(attack => new Attack(attack));
+        
+
+        this.nom = nom;
+        this.form = TEST.form;
+        this.idPokemon = TEST.pokemon_id;
+        this.base_attaque = TEST.base_attack;
+        this.base_defense = TEST.base_defense;
+        this.stamina = TEST.base_stamina;
+        this.types = TYPE.type.map(type => Type.all_types[type]);
+        
+        this.attacks = (MOVE ? (MOVE.charged_moves.concat(MOVE.fast_moves)) : []).map(attack => new Attack(attack));
         
         Pokemon.all_pokemons[this.idPokemon] = this;
     }
 
     toString() {
-        return this.nom + " : #" + this.idPokemon + ", " + this.base_attaque + ", " + this.base_defense + ", " + this.stamina;
+
     }
 }
 
