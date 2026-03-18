@@ -54,7 +54,7 @@ function fill_types() {
 fill_types();
 
 //test la fonction fill_types avec un exemple de type
-console.log(Type.all_types["Bug"].toString());
+console.table(Type.all_types);
 
 //test la methode toString() avec un exemple de type
 console.log(new Type("Dark").toString());
