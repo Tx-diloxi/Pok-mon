@@ -53,7 +53,7 @@ function fill_types() {
 }
 fill_types();
 
-//test la fonction fill_types avec un exemple de type
+//test la fonction fill_types 
 console.table(Type.all_types);
 
 //test la methode toString() avec un exemple de type
