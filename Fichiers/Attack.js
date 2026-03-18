@@ -14,7 +14,7 @@ class Attack {
         this.puissance = puissance;
         this.duree = duree;
 
-        Attack.all_attacks[nom] = this;
+        Attack.all_attacks[idAttaque] = this;
     }
 
     toString() {
@@ -42,3 +42,6 @@ console.table(Attack.all_attacks);
 
 //test la methode toString() avec un exemple d'attaque
 console.log(new Attack("Test", 999, "test", 999, 0.1).toString());
+
+//test après ajout d'une attaque personnalisée
+console.table(Attack.all_attacks);
