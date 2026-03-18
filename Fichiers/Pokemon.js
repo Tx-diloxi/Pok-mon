@@ -1,5 +1,4 @@
 import Type from "./Type.js";
-import Attack from "./Attack.js";
 
 import pokemon_moves from "./Info Pokémons/pokemon_moves.js";
 import pokemons from "./Info Pokémons/pokemons.js";
