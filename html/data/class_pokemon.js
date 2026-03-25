@@ -69,6 +69,6 @@ fill_pokemons();
 
 // console.table(new Pokemon("Bulbasaur").getTypes());
 
-// console.table(new Pokemon("Bulbasaur").getAttacks());
+//console.table(new Pokemon("Bulbasaur").getAttacks());
 
 export default Pokemon;
