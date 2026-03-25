@@ -8,7 +8,7 @@ function getPokemonsByType(typeName){
     let pokemonsDuType = [];
     for (let idPokemon in Pokemon.all_pokemons) {
         let lePokemon = Pokemon.all_pokemons[idPokemon];
-        if (lePokemon.nomTypes.some(type => type.nom.toLowerCase() == typeName.toLowerCase())) {
+        if (lePokemon.nomTypes.some(type => type.nom == typeName)) {
             pokemonsDuType.push(lePokemon);
         }
     }
