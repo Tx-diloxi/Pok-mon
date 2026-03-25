@@ -19,4 +19,4 @@ function getPokemonsByType(typeName){
     });
 }
 
-getPokemonsByType("Water");
+getPokemonsByType("Fire");
