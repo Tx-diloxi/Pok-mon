@@ -39,3 +39,5 @@ function getPokemonsByAttack(attackName){
 }
 
 getPokemonsByAttack("Wrap");
+
+//Q3. Fonction getAttacksByType(typeName) affichant, dans la console, la liste des attaques pour un type donné (en argument).
