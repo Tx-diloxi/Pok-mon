@@ -15,7 +15,7 @@ function getPokemonsByType(typeName){
     //affichage formaté
     console.log("Liste des " + pokemonsDuType.length + " Pokémons de type " + typeName + " :");
     pokemonsDuType.forEach(pokemon => {
-        console.log(`- ${pokemon.toString()}`);
+        console.log(pokemon.toString());
     });
 }
 
