@@ -5,12 +5,10 @@ import Type from "../data/class_type.js";
 //Q1. Fonction getPokemonsByType(typeName) affichant, dans la console, la liste des Pokémons pour un type donné (en argument).
 function getPokemonsByType(typeName){
 
-    //recherche insensible à la casse
-    const typeNameLower = typeName.toLowerCase();
     let pokemonsDuType = [];
     for (let idPokemon in Pokemon.all_pokemons) {
         let pokemon = Pokemon.all_pokemons[idPokemon];
-        if (pokemon.nomTypes.some(type => type.nom.toLowerCase() == typeNameLower)) {
+        if (pokemon.nomTypes.some(type => type.nom.toLowerCase() == typeName)) {
             pokemonsDuType.push(pokemon);
         }
     }
