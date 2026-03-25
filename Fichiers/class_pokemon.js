@@ -55,7 +55,7 @@ class Pokemon {
 
     static getWeakestEnemies(attackName){
         let attaques = Object.values(Attack.all_attacks).find(attaque => attaque.nom === attackName);
-        if (!attaques) {
+        if (attaques.length === 0) {
             console.log("Aucune attaque trouvée avec le nom : " + attackName);
             return;
         }
@@ -69,7 +69,7 @@ class Pokemon {
             let lePokemon = Pokemon.all_pokemons[idPokemon];
             let efficacite = 1;
             lePokemon.getTypes().forEach(typePokemon => {
-                let coeff = typeAttaque.efficacite[typePokemon.nom];
+                let coeff = type.efficacite[typePokemon.nom];
                 if (coeff !== undefined) {
                     efficacite *= coeff;
                 }
@@ -107,4 +107,4 @@ fill_pokemons();
 
 // console.table(new Pokemon("Bulbasaur").getAttacks());
 
-Pokemon.getWeakestEnemies("Flamethrower");
+// Pokemon.getWeakestEnemies("Bulldoze");
