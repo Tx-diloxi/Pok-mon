@@ -56,4 +56,12 @@ function getAttacksByType(typeName){
         console.log(attaque.toString());
     });
 }
-getAttacksByType("Fire");
+//getAttacksByType("Fire");
+
+//Fonction sortPokemonsByTypeThenName() affichant, dans la console, la liste des Pokémons triés par type puis par nom dans l’ordre alphabétique.
+//Comme les Pokemons peuvent être de plusieurs types, vous devrez les comparer en triant, au préalable, les types de chacun par ordre alphabétique.
+function sortPokemonsByTypeThenName(){
+    let lesPokemons = Pokemon.all_pokemons;
+}
+
+sortPokemonsByTypeThenName();
