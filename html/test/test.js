@@ -18,5 +18,23 @@ function getPokemonsByType(typeName){
         console.log(pokemon.toString());
     });
 }
+//getPokemonsByType("Fire");
 
-getPokemonsByType("Fire");
+//Q2. Fonction getPokemonsByAttack(attackName) affichant, dans la console, la liste des Pokémons pour une attaque donnée (en argument).
+function getPokemonsByAttack(attackName){
+
+    let pokemonsAvecAttaque = [];
+    for (let idPokemon in Pokemon.all_pokemons) {
+        let lePokemon = Pokemon.all_pokemons[idPokemon];
+        if (lePokemon.nomAttaques.some(attaque => attaque.nom == attackName)) {
+            pokemonsAvecAttaque.push(lePokemon);
+        }
+    }
+    //affichage formaté
+    console.log("Liste des " + pokemonsAvecAttaque.length + " Pokémons ayant l'attaque " + attackName + " :");
+    pokemonsAvecAttaque.forEach(pokemon => {
+        console.log(pokemon.toString());
+    });
+}
+
+getPokemonsByAttack("Ember");
