@@ -103,4 +103,8 @@ function sortPokemonsByTypeThenName(){
 
 }
 
-sortPokemonsByTypeThenName();
+//sortPokemonsByTypeThenName();
+
+//Q5. Méthode getWeakestEnemies(attackName) de la classe Pokemon, affichant, dans la console, la liste des Pokémons pour 
+// lesquels l’attaque choisie est la plus efficace. Le nom de l’attaque est une chaîne de caractères.
+Pokemon.getWeakestEnemies("Wrap");
