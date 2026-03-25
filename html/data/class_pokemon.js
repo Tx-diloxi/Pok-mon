@@ -44,7 +44,7 @@ class Pokemon {
         for (let i = 0; i < attaques.length; i++) {
             let nomAttaque = attaques[i];
             for (let attaque in Attack.all_attacks) {
-                if (Attack.all_attacks[attaque].nom === nomAttaque) {
+                if (Attack.all_attacks[attaque].nom == nomAttaque) {
                     attaques[i] = Attack.all_attacks[attaque];
                 }
             }
