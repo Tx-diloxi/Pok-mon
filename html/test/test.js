@@ -7,16 +7,16 @@ function getPokemonsByType(typeName){
 
     let pokemonsDuType = [];
     for (let idPokemon in Pokemon.all_pokemons) {
-        let pokemon = Pokemon.all_pokemons[idPokemon];
-        if (pokemon.nomTypes.some(type => type.nom.toLowerCase() == typeName)) {
-            pokemonsDuType.push(pokemon);
+        let lePokemon = Pokemon.all_pokemons[idPokemon];
+        if (lePokemon.nomTypes.some(type => type.nom.toLowerCase() == typeName.toLowerCase())) {
+            pokemonsDuType.push(lePokemon);
         }
     }
     //affichage formaté
-    console.log(`Liste des ${pokemonsDuType.length} Pokémons :`);
+    console.log("Liste des " + pokemonsDuType.length + " Pokémons de type " + typeName + " :");
     pokemonsDuType.forEach(pokemon => {
         console.log(`- ${pokemon.toString()}`);
     });
 }
 
-getPokemonsByType("Fire");
+getPokemonsByType("Water");
