@@ -58,7 +58,7 @@ function getAttacksByType(typeName){
 }
 //getAttacksByType("Fire");
 
-//Fonction sortPokemonsByTypeThenName() affichant, dans la console, la liste des Pokémons triés par type puis par nom dans l’ordre alphabétique.
+//Q4. Fonction sortPokemonsByTypeThenName() affichant, dans la console, la liste des Pokémons triés par type puis par nom dans l’ordre alphabétique.
 //Comme les Pokemons peuvent être de plusieurs types, vous devrez les comparer en triant, au préalable, les types de chacun par ordre alphabétique.
 function sortPokemonsByTypeThenName(){
     //je recupère tous les pokémons dans un tableau
@@ -78,19 +78,19 @@ function sortPokemonsByTypeThenName(){
         let maxLongeurTypes = typesPokemon1.length > typesPokemon2.length ? typesPokemon1.length : typesPokemon2.length;
         for (let i = 0; i < maxLongeurTypes; i++) {
             if (typesPokemon1[i] < typesPokemon2[i]){ 
-                return -1;
+                return -1;//-1 car pokemon1 est avant pokemon2 dans l'ordre alphabétique des types
             }
             if (typesPokemon1[i] > typesPokemon2[i]) {
-                return 1;
+                return 1;//1 car pokemon2 est avant pokemon1 dans l'ordre alphabétique des types
             }
         }
 
         //si les types sont identiques ou que l'un des pokémons a moins de types que l'autre, je compare les noms
         if (pokemon1.nom < pokemon2.nom){
-            return -1;
+            return -1;//-1 car pokemon1 est avant pokemon2 dans l'ordre alphabétique des noms
         }
         if (pokemon1.nom > pokemon2.nom) {
-            return 1;
+            return 1;//1 car pokemon2 est avant pokemon1 dans l'ordre alphabétique des noms
         }
         return 0;
     });
