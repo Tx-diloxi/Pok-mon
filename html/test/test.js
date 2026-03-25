@@ -38,6 +38,22 @@ function getPokemonsByAttack(attackName){
     });
 }
 
-getPokemonsByAttack("Wrap");
+//getPokemonsByAttack("Wrap");
 
 //Q3. Fonction getAttacksByType(typeName) affichant, dans la console, la liste des attaques pour un type donné (en argument).
+function getAttacksByType(typeName){
+
+    let attaquesDuType = [];
+    for (let idAttaque in Attack.all_attacks) {
+        let lAttaque = Attack.all_attacks[idAttaque];
+        if (lAttaque.type == typeName) {
+            attaquesDuType.push(lAttaque);
+        }
+    }
+    //affichage formaté
+    console.log("Liste des " + attaquesDuType.length + " attaques de type " + typeName + " :");
+    attaquesDuType.forEach(attaque => {
+        console.log(attaque.toString());
+    });
+}
+getAttacksByType("Fire");
