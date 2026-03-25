@@ -11,9 +11,9 @@ class Pokemon {
 
     constructor(nom) {
 
-        let lesInfosDuPokemon = pokemons.find(p => p.pokemon_name == nom && p.form == "Normal");
-        let lesTypesDuPokemon = pokemon_types.find(p => p.pokemon_name == nom && p.form == "Normal");
-        let lesAttauquesDuPokemon = pokemon_moves.find(p => p.pokemon_name == nom && p.form == "Normal");
+        let lesInfosDuPokemon = pokemons.find(p => p.pokemon_name == nom);
+        let lesTypesDuPokemon = pokemon_types.find(p => p.pokemon_name == nom);
+        let lesAttauquesDuPokemon = pokemon_moves.find(p => p.pokemon_name == nom);
         
         
         this.idPokemon = lesInfosDuPokemon.pokemon_id;
@@ -53,12 +53,20 @@ class Pokemon {
         return attaques;
     }
 }
+//à partir de la source de données, crée des objets Pokemon que vous stockez dans all_pokemons.
+function fill_pokemons() {
+    //on parcourt la liste des pokémons pour créer des Pokemon et les stocker dans all_pokemons
+    for (let i = 0; i < pokemons.length; i++) {
+        new Pokemon(pokemons[i].pokemon_name);
+    }   
+}
+fill_pokemons();
 
 //console.table(Pokemon.all_pokemons);
 
 
-console.table(new Pokemon("Bulbasaur").toString());
+// console.table(new Pokemon("Bulbasaur").toString());
 
-console.table(new Pokemon("Bulbasaur").getTypes());
+// console.table(new Pokemon("Bulbasaur").getTypes());
 
-console.table(new Pokemon("Bulbasaur").getAttacks());
+// console.table(new Pokemon("Bulbasaur").getAttacks());
