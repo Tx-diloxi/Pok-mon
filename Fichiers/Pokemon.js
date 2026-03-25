@@ -31,7 +31,7 @@ class Pokemon {
     }
 
     toString() {
-        return this.nom + " : #" + this.idPokemon + ", [Normal] , [STA: " + this.stamina + ", ATK: " + this.base_attaque + ", DEF: " + this.base_defense + "], Rapides = [" + this.nomAttaqueRapides.join(", ") + "], Chargées = [" + this.nomAttaqueChargees.join(", ") + "]";
+        return this.nom + " : #" + this.idPokemon + ", ["+ this.nomTypes.map(type => type.nom).join(", ") + "] , [STA: " + this.stamina + ", ATK: " + this.base_attaque + ", DEF: " + this.base_defense + "], Rapides = [" + this.nomAttaqueRapides.join(", ") + "], Chargées = [" + this.nomAttaqueChargees.join(", ") + "]";
     }
 
     getTypes() {
