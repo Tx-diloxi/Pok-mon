@@ -22,6 +22,7 @@ class Attack {
     }
 }
 
+//à partir de la source de données, crée des objets Type que vous stockez dans all_types
 function fill_attacks() {
     //on parcourt les listes d'attaques rapides pour créer des Attack et les stocker dans all_attacks
     for (let i = 0; i < fast_moves.length; i++) {
