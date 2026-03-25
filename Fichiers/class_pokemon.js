@@ -52,6 +52,42 @@ class Pokemon {
 
         return attaques;
     }
+
+    static getWeakestEnemies(attackName){
+        let attaques = Object.values(Attack.all_attacks).find(attaque => attaque.nom === attackName);
+        if (!attaques) {
+            console.log("Aucune attaque trouvée avec le nom : " + attackName);
+            return;
+        }
+
+        let typeAttaque = attaques.type;
+        let type = Type.all_types[typeAttaque];
+        let maxEfficiency = 0;
+        let listePokemonsEfficaces = [];
+
+        for (let idPokemon in Pokemon.all_pokemons) {
+            let lePokemon = Pokemon.all_pokemons[idPokemon];
+            let efficacite = 1;
+            lePokemon.getTypes().forEach(typePokemon => {
+                let coeff = typeAttaque.efficacite[typePokemon.nom];
+                if (coeff !== undefined) {
+                    efficacite *= coeff;
+                }
+            });
+
+            if (efficacite > maxEfficiency) {
+                maxEfficiency = efficacite;
+                listePokemonsEfficaces = [lePokemon];
+            } else if (efficacite === maxEfficiency && maxEfficiency > 0) {
+                listePokemonsEfficaces.push(lePokemon);
+            }
+        }
+
+        console.log("Pokémons les plus faibles contre l'attaque " + attackName + " :");
+        listePokemonsEfficaces.forEach(pokemon => {
+            console.log(pokemon.toString());
+        });
+    }
 }
 //à partir de la source de données, crée des objets Pokemon que vous stockez dans all_pokemons.
 function fill_pokemons() {
@@ -70,3 +106,5 @@ fill_pokemons();
 // console.table(new Pokemon("Bulbasaur").getTypes());
 
 // console.table(new Pokemon("Bulbasaur").getAttacks());
+
+Pokemon.getWeakestEnemies("Flamethrower");
