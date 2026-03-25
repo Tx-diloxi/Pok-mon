@@ -26,7 +26,8 @@ function getPokemonsByAttack(attackName){
     let pokemonsAvecAttaque = [];
     for (let idPokemon in Pokemon.all_pokemons) {
         let lePokemon = Pokemon.all_pokemons[idPokemon];
-        if (lePokemon.nomAttaques.some(attaque => attaque.nom == attackName)) {
+        let sesAttaques = lePokemon.getAttacks();
+        if (sesAttaques.some(attaque => attaque.nom == attackName)) {
             pokemonsAvecAttaque.push(lePokemon);
         }
     }
@@ -37,4 +38,4 @@ function getPokemonsByAttack(attackName){
     });
 }
 
-getPokemonsByAttack("Ember");
+getPokemonsByAttack("Wrap");
