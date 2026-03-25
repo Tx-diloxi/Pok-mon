@@ -61,7 +61,46 @@ function getAttacksByType(typeName){
 //Fonction sortPokemonsByTypeThenName() affichant, dans la console, la liste des Pokémons triés par type puis par nom dans l’ordre alphabétique.
 //Comme les Pokemons peuvent être de plusieurs types, vous devrez les comparer en triant, au préalable, les types de chacun par ordre alphabétique.
 function sortPokemonsByTypeThenName(){
-    let lesPokemons = Pokemon.all_pokemons;
+    //je recupère tous les pokémons dans un tableau
+    let lesPokemons = [];    
+    for (let idPokemon in Pokemon.all_pokemons) {
+        lesPokemons.push(Pokemon.all_pokemons[idPokemon]);
+    }
+
+    //je trie les pokémons par type puis par nom
+    lesPokemons.sort((pokemon1, pokemon2) => {
+        //je trie les noms de types de chaque pokémon par ordre alphabétique
+        let typesPokemon1 = pokemon1.nomTypes.map(type => type.nom).sort();
+        let typesPokemon2 = pokemon2.nomTypes.map(type => type.nom).sort();
+        //ex : ["c", "b"] -> ["b", "c"]
+
+        //je compare les types des deux pokémons
+        let maxLongeurTypes = typesPokemon1.length > typesPokemon2.length ? typesPokemon1.length : typesPokemon2.length;
+        for (let i = 0; i < maxLongeurTypes; i++) {
+            if (typesPokemon1[i] < typesPokemon2[i]){ 
+                return -1;
+            }
+            if (typesPokemon1[i] > typesPokemon2[i]) {
+                return 1;
+            }
+        }
+
+        //si les types sont identiques ou que l'un des pokémons a moins de types que l'autre, je compare les noms
+        if (pokemon1.nom < pokemon2.nom){
+            return -1;
+        }
+        if (pokemon1.nom > pokemon2.nom) {
+            return 1;
+        }
+        return 0;
+    });
+
+    //affichage formaté
+    console.log("Liste des " + lesPokemons.length + " Pokémons triés par type puis par nom :");
+    lesPokemons.forEach(pokemon => {
+        console.log(pokemon.toString());
+    });
+
 }
 
 sortPokemonsByTypeThenName();
