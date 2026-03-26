@@ -157,6 +157,7 @@ fill_pokemons();
 
 
 // console.table(new Pokemon("Bulbasaur").toString());
+// console.table(new Pokemon("Charizard").toString());
 
 // console.table(new Pokemon("Bulbasaur").getTypes());
 
