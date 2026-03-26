@@ -139,15 +139,13 @@ function fastFight(pokemonNameA, pokemonNameB) {
     let hpB = pokemonB.stamina;
 
     let tour = 0;
-    let historique = []; //tableau pour stocker le déroulement du combat
-
-    console.log("Début du combat : " + pokemonA.nom + " (PV: " + hpA + ") vs " + pokemonB.nom + " (PV: " + hpB + ")\n");
-
+    let historique = []; //tab pour stocker le déroulement du combat
+    
     while (hpA > 0 && hpB > 0) {
         const attaquant = tour % 2 === 0 ? pokemonA : pokemonB;
         const defenseur = tour % 2 === 0 ? pokemonB : pokemonA;
 
-        // Meilleure attaque rapide de l'attaquant contre le défenseur
+        //meilleure attaque rapide de l'attaquant contre le défenseur
         const bestAttack = attaquant.getBestFastAttacksForEnemy(false, defenseur.nom);
 
         if (!bestAttack) {
@@ -155,46 +153,45 @@ function fastFight(pokemonNameA, pokemonNameB) {
             break;
         }
 
-        // Récupération des dégâts bruts et arrondi à l'unité supérieure
+        //recup des dégâts bruts et arrondi à l'unité supérieure
         let degats = bestAttack.degats;
-        degats = Math.ceil(degats);
+        degats = Math.round(degats);
 
-        // Application des dégâts
+        //met a jour les hp du défenseur
         if (tour % 2 === 0) {
-            hpB = Math.max(0, hpB - degats);
+            for (let i = 0; i < degats; i++) {
+                if (hpB > 0) {
+                    hpB--;
+                }
+            }
         } else {
-            hpA = Math.max(0, hpA - degats);
+            for (let i = 0; i < degats; i++) {
+                if (hpA > 0) {
+                    hpA--;
+                }
+            }
         }
 
-        // Enregistrement du tour
+        //enregistrement du tour dans un tab au format demande
+        const reste = tour % 2 === 0 ? hpB : hpA; //PV du défenseur après l'attaque
         historique.push({
             Tour: tour + 1,
             Attaquant: attaquant.nom,
-            ATK: bestAttack.attaque.nom,
+            ATK: attaquant.base_attaque,
             Défenseur: defenseur.nom,
-            DEF: ,
-            "Type attaque": bestAttack.attaque.type,
-            Puissance: bestAttack.attaque.puissance,
-            Efficacité: bestAttack.efficacite.toFixed(3),
+            DEF: defenseur.base_defense,
+            "Nom Attaque": bestAttack.attaque.nom,
+            Efficacité: Number(bestAttack.efficacite.toFixed(3)),
             Dégâts: degats,
-            [`PV ${pokemonA.nom}`]: hpA,
-            [`PV ${pokemonB.nom}`]: hpB
+            Reste: reste
         });
 
         tour++;
     }
 
-    // Affichage du tableau complet du combat
+    //affichage du tableau complet du combat
     console.table(historique);
 
-    // Annonce du vainqueur
-    if (hpA <= 0 && hpB <= 0) {
-        console.log("Match nul ! Les deux Pokémon sont KO en même temps.");
-    } else if (hpA <= 0) {
-        console.log("Le Pokémon " + pokemonB.nom + " remporte le combat !");
-    } else {
-        console.log("Le Pokémon " + pokemonA.nom + " remporte le combat !");
-    }
 }
 
 fastFight("Bulbasaur", "Charmander");
