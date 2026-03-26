@@ -8,7 +8,7 @@ function getPokemonsByType(typeName){
     let pokemonsDuType = [];
     for (let idPokemon in Pokemon.all_pokemons) {
         let lePokemon = Pokemon.all_pokemons[idPokemon];
-        if (lePokemon.nomTypes.some(type => type.nom == typeName)) {
+        if (lePokemon.nomTypes.some(type => type.nom.toLowerCase() == typeName.toLowerCase())) {
             pokemonsDuType.push(lePokemon);
         }
     }
@@ -27,7 +27,7 @@ function getPokemonsByAttack(attackName){
     for (let idPokemon in Pokemon.all_pokemons) {
         let lePokemon = Pokemon.all_pokemons[idPokemon];
         let sesAttaques = lePokemon.getAttacks();
-        if (sesAttaques.some(attaque => attaque.nom == attackName)) {
+        if (sesAttaques.some(attaque => attaque.nom.toLowerCase() == attackName.toLowerCase())) {
             pokemonsAvecAttaque.push(lePokemon);
         }
     }
@@ -46,7 +46,7 @@ function getAttacksByType(typeName){
     let attaquesDuType = [];
     for (let idAttaque in Attack.all_attacks) {
         let lAttaque = Attack.all_attacks[idAttaque];
-        if (lAttaque.type == typeName) {
+        if (lAttaque.type.toLowerCase() == typeName.toLowerCase()) {
             attaquesDuType.push(lAttaque);
         }
     }
