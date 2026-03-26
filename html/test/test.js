@@ -116,10 +116,8 @@ function sortPokemonsByTypeThenName(){
 // Q6. Méthode getBestFastAttacksForEnemy(print, pokemonName) affichant, dans la console et uniquement si le paramètre print vaut true, la liste des attaques
 // (toString()) et de leurs dégâts (Puissance x Efficacité x (Base Attack A / BaseDefense B)) contre un Pokémon donné. Le Pokemon A est l’objet sur lequel on appelle la
 // méthode et le Pokemon B est celui dont le nom est passé en paramètre (i.e.pokemonName)
-// let pikachu = Object.values(Pokemon.all_pokemons).find(p => p.nom === "Pikachu");
-// pikachu.getBestFastAttacksForEnemy(true, "Bulbasaur");
-// let reponse = pikachu.getBestFastAttacksForEnemy(false, "Bulbasaur");
-// console.log(reponse);
+let pikachu = new Pokemon("Pikachu");
+pikachu.getBestFastAttacksForEnemy(true, "Bulbasaur");
 
 //Q7. Fonction fastFight(pokemonNameA, pokemonNameB) affichant, dans la console, le déroulement d’un combat entre 2 pokemons. 
 // Ici vous devez utiliser console.table(). Chaque attaque est déterminée par getBestFastAttackForEnemy(false,pokemonName).
@@ -165,4 +163,4 @@ function fastFight(pokemonNameA, pokemonNameB){
     console.table(combat);    
 }
 
-fastFight("Bulbasaur", "Charmander");
+//fastFight("Bulbasaur", "Charmander");
