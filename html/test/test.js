@@ -195,3 +195,14 @@ function fastFight(pokemonNameA, pokemonNameB) {
 }
 
 fastFight("Bulbasaur", "Charizard");
+if (typeof window !== 'undefined'){
+    window.Pokemon = Pokemon;
+    window.Attack = Attack;
+    window.Type = Type;
+
+    window.getPokemonsByType = getPokemonsByType;
+    window.getPokemonsByAttack = getPokemonsByAttack;
+    window.getAttacksByType = getAttacksByType;
+    window.sortPokemonsByTypeThenName = sortPokemonsByTypeThenName;
+    window.fastFight = fastFight;
+}
