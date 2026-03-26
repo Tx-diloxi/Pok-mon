@@ -95,34 +95,49 @@ class Pokemon {
     }
 
     getBestFastAttacksForEnemy(print, pokemonName) {
-        let enemy = Pokemon.all_pokemons[Object.keys(Pokemon.all_pokemons).find(id => Pokemon.all_pokemons[id].nom == pokemonName)];
-        if (!enemy) {
+        const ennemi = Object.values(Pokemon.all_pokemons).find(p => p.nom === pokemonName);
+        if (!ennemi) {
             console.log("Aucun Pokémon trouvé avec le nom : " + pokemonName);
-            return;
+            return null;
         }
-        let bestAttacks = null;
-        
+
+        const resultats = [];
+
         this.nomAttaqueRapides.forEach(nomAttaque => {
-            let attaque = Object.values(Attack.all_attacks).find(a => a.nom == nomAttaque);
-            if (attaque) {
-                let typeAttaque = attaque.type;
-                let efficacite = 1;
-                enemy.getTypes().forEach(typePokemon => {
-                    let coeff = Type.all_types[typeAttaque].efficacite[typePokemon.nom];
-                    if (coeff !== undefined) {
-                        efficacite *= coeff;
-                    }
-                });
-                let degats = attaque.puissance * efficacite * (this.base_attaque / enemy.base_defense);
-                if (!bestAttacks || degats > bestAttacks.degats || (degats == bestAttacks.degats && attaque.nom < bestAttacks.attaque.nom)) {
-                    bestAttacks = {attaque: attaque, degats: degats, efficacite: efficacite};
-                }
+            const attaque = Object.values(Attack.all_attacks).find(a => a.nom === nomAttaque);
+            if (!attaque) {
+                return;
             }
+
+            const efficacite = ennemi.getTypes().reduce((acc, typePokemon) => {
+                const coeff = Type.all_types[attaque.type]?.efficacite[typePokemon.nom];
+                return coeff !== undefined ? acc * coeff : acc;
+            }, 1);
+
+            const degats = attaque.puissance * efficacite * (this.base_attaque / ennemi.base_defense);
+            resultats.push({ attaque, degats, efficacite });
         });
-        if (print) {
-            console.log(bestAttacks.attaque.toString() + " contre " + enemy.nom + " : " + "dégâts = " + bestAttacks.degats.toFixed(3), " (efficacité = " + bestAttacks.efficacite.toFixed(3) + ")");
+
+        if (resultats.length === 0) {
+            if (print) {
+                console.log("Aucune attaque rapide disponible pour " + this.nom + " contre " + ennemi.nom);
+            }
+            return null;
         }
-        return bestAttacks;
+
+        resultats.sort((a, b) => {
+            if (b.degats !== a.degats) return b.degats - a.degats;
+            return a.attaque.nom.localeCompare(b.attaque.nom);
+        });
+
+        if (print) {
+            console.log("Attaques rapides de " + this.nom + " contre " + ennemi.nom + " :");
+            resultats.forEach(r => {
+                console.log(r.attaque.toString() + " => dégâts = " + r.degats.toFixed(3) + " (efficacité = " + r.efficacite.toFixed(3) + ")");
+            });
+        }
+
+        return resultats[0];
     }
 }   
 
