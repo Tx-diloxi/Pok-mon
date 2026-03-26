@@ -95,7 +95,7 @@ class Pokemon {
     }
 
     getBestFastAttacksForEnemy(print, pokemonName) {
-        const ennemi = Object.values(Pokemon.all_pokemons).find(p => p.nom === pokemonName);
+        const ennemi = Object.values(Pokemon.all_pokemons).find(p => p.nom.toLowerCase() === pokemonName.toLowerCase());
         if (!ennemi) {
             console.log("Aucun Pokémon trouvé avec le nom : " + pokemonName);
             return null;
