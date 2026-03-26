@@ -88,7 +88,7 @@ class Pokemon {
             }
         }
 
-        console.log("Pokémons les plus faibles contre l'attaque " + attackName + " avec un coefficient d'efficacité de " + maxEfficiency.toFixed(3) + " :");
+        console.log("Liste des Pokémons les plus faibles contre l'attaque  " + attackName + " sont : " + listePokemonsEfficaces.length + " avec un coefficient d'efficacité de " + maxEfficiency.toFixed(3) + " :");
         listePokemonsEfficaces.forEach(pokemon => {
             console.log(pokemon.toString());
         });
