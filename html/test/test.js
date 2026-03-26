@@ -139,10 +139,8 @@ function fastFight(pokemonNameA, pokemonNameB) {
     let hpB = pokemonB.stamina;
 
     let tour = 0;
-    let historique = []; //tableau pour stocker le déroulement du combat
-
-    console.log("Début du combat : " + pokemonA.nom + " (PV: " + hpA + ") vs " + pokemonB.nom + " (PV: " + hpB + ")\n");
-
+    let historique = []; //tab pour stocker le déroulement du combat
+    
     while (hpA > 0 && hpB > 0) {
         const attaquant = tour % 2 === 0 ? pokemonA : pokemonB;
         const defenseur = tour % 2 === 0 ? pokemonB : pokemonA;
@@ -174,8 +172,8 @@ function fastFight(pokemonNameA, pokemonNameB) {
             }
         }
 
-        // Enregistrement du tour (format demandé)
-        const reste = tour % 2 === 0 ? hpB : hpA; // PV du défenseur après l'attaque
+        //enregistrement du tour dans un tab au format demande
+        const reste = tour % 2 === 0 ? hpB : hpA; //PV du défenseur après l'attaque
         historique.push({
             Tour: tour + 1,
             Attaquant: attaquant.nom,
@@ -191,17 +189,9 @@ function fastFight(pokemonNameA, pokemonNameB) {
         tour++;
     }
 
-    // Affichage du tableau complet du combat
+    //affichage du tableau complet du combat
     console.table(historique);
 
-    // Annonce du vainqueur
-    if (hpA <= 0 && hpB <= 0) {
-        console.log("Match nul ! Les deux Pokémon sont KO en même temps.");
-    } else if (hpA <= 0) {
-        console.log("Le Pokémon " + pokemonB.nom + " remporte le combat !");
-    } else {
-        console.log("Le Pokémon " + pokemonA.nom + " remporte le combat !");
-    }
 }
 
 fastFight("Bulbasaur", "Charmander");
