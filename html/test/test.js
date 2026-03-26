@@ -129,8 +129,7 @@ console.log(reponse);
 // Ici vous devez utiliser console.table(). Chaque attaque est déterminée par getBestFastAttackForEnemy(false,pokemonName).
 function fastFight(pokemonNameA, pokemonNameB){
 
-    let pokemonA = Pokemon.getPokemonByName(pokemonNameA);
-    let pokemonB = Pokemon.getPokemonByName(pokemonNameB);
+
     
 }
 
