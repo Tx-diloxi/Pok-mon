@@ -193,7 +193,9 @@ function fastFight(pokemonNameA, pokemonNameB) {
 
 }
 
-fastFight("Bulbasaur", "Charizard");
+//fastFight("Bulbasaur", "Charizard");
+
+
 if (typeof window !== 'undefined'){
     window.Pokemon = Pokemon;
     window.Attack = Attack;
