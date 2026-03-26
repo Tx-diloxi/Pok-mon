@@ -140,7 +140,7 @@ function fastFight(pokemonNameA, pokemonNameB) {
 
     let tour = 0;
     let historique = []; //tab pour stocker le déroulement du combat
-    
+
     while (hpA > 0 && hpB > 0) {
         const attaquant = tour % 2 === 0 ? pokemonA : pokemonB;
         const defenseur = tour % 2 === 0 ? pokemonB : pokemonA;
@@ -194,4 +194,4 @@ function fastFight(pokemonNameA, pokemonNameB) {
 
 }
 
-fastFight("Bulbasaur", "Charmander");
+fastFight("Bulbasaur", "Charizard");
