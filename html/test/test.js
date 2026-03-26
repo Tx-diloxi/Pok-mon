@@ -74,18 +74,21 @@ function sortPokemonsByTypeThenName(){
         let typesPokemon2 = pokemon2.nomTypes.map(type => type.nom).sort();
         //ex : ["c", "b"] -> ["b", "c"]
 
-        //je compare les types des deux pokémons
+        //je compare les types des deux pokémons et retourne le plus long
         let maxLongeurTypes = typesPokemon1.length > typesPokemon2.length ? typesPokemon1.length : typesPokemon2.length;
+        //je parcours le type le plus long et je compare les types des deux pokémons
         for (let i = 0; i < maxLongeurTypes; i++) {
+            //si le pokemon1 est avant dans l'ordre alphabétique des types, je le retourne
             if (typesPokemon1[i] < typesPokemon2[i]){ 
                 return -1;//-1 car pokemon1 est avant pokemon2 dans l'ordre alphabétique des types
             }
+            //si le pokemon2 est avant dans l'ordre alphabétique des types, je le retourne
             if (typesPokemon1[i] > typesPokemon2[i]) {
                 return 1;//1 car pokemon2 est avant pokemon1 dans l'ordre alphabétique des types
             }
         }
 
-        //si les types sont identiques ou que l'un des pokémons a moins de types que l'autre, je compare les noms
+        //je compare mtn les noms
         if (pokemon1.nom < pokemon2.nom){
             return -1;//-1 car pokemon1 est avant pokemon2 dans l'ordre alphabétique des noms
         }
@@ -108,3 +111,15 @@ function sortPokemonsByTypeThenName(){
 //Q5. Méthode getWeakestEnemies(attackName) de la classe Pokemon, affichant, dans la console, la liste des Pokémons pour 
 // lesquels l’attaque choisie est la plus efficace. Le nom de l’attaque est une chaîne de caractères.
 Pokemon.getWeakestEnemies("Wrap");
+
+
+//Q7. Fonction fastFight(pokemonNameA, pokemonNameB) affichant, dans la console, le déroulement d’un combat entre 2 pokemons. 
+// Ici vous devez utiliser console.table(). Chaque attaque est déterminée par getBestFastAttackForEnemy(false,pokemonName).
+function fastFight(pokemonNameA, pokemonNameB){
+
+    let pokemonA = Pokemon.getPokemonByName(pokemonNameA);
+    let pokemonB = Pokemon.getPokemonByName(pokemonNameB);
+    
+}
+
+//fastFight("Bulbasaur", "Charmander");

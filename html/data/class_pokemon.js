@@ -54,14 +54,19 @@ class Pokemon {
     }
 
     static getWeakestEnemies(attackName){
-        let attaques = Object.values(Attack.all_attacks).find(attaque => attaque.nom === attackName);
-        if (attaques.length === 0) {
+        let attaque = Object.values(Attack.all_attacks).find(attaque => attaque.nom == attackName);
+        if (!attaque) {
             console.log("Aucune attaque trouvée avec le nom : " + attackName);
             return;
         }
 
-        let typeAttaque = attaques.type;
+        let typeAttaque = attaque.type;
         let type = Type.all_types[typeAttaque];
+        if (!type) {
+            console.log("Type inconnu pour l'attaque : " + attackName + " (" + typeAttaque + ")");
+            return;
+        }
+
         let maxEfficiency = 0;
         let listePokemonsEfficaces = [];
 
@@ -78,7 +83,7 @@ class Pokemon {
             if (efficacite > maxEfficiency) {
                 maxEfficiency = efficacite;
                 listePokemonsEfficaces = [lePokemon];
-            } else if (efficacite === maxEfficiency && maxEfficiency > 0) {
+            } else if (efficacite == maxEfficiency && maxEfficiency > 0) {
                 listePokemonsEfficaces.push(lePokemon);
             }
         }
