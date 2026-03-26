@@ -195,3 +195,13 @@ function fastFight(pokemonNameA, pokemonNameB) {
 }
 
 fastFight("Bulbasaur", "Charmander");
+
+window.Pokemon = Pokemon;
+window.Attack = Attack;
+window.Type = Type;
+
+window.getPokemonsByType = getPokemonsByType;
+window.getPokemonsByAttack = getPokemonsByAttack;
+window.getAttacksByType = getAttacksByType;
+window.sortPokemonsByTypeThenName = sortPokemonsByTypeThenName;
+window.fastFight = fastFight;
