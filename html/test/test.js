@@ -116,18 +116,53 @@ function sortPokemonsByTypeThenName(){
 // Q6. Méthode getBestFastAttacksForEnemy(print, pokemonName) affichant, dans la console et uniquement si le paramètre print vaut true, la liste des attaques
 // (toString()) et de leurs dégâts (Puissance x Efficacité x (Base Attack A / BaseDefense B)) contre un Pokémon donné. Le Pokemon A est l’objet sur lequel on appelle la
 // méthode et le Pokemon B est celui dont le nom est passé en paramètre (i.e.pokemonName)
-
-let pikachu = Object.values(Pokemon.all_pokemons).find(p => p.nom === "Pikachu");
-pikachu.getBestFastAttacksForEnemy(true, "Bulbasaur");
-let reponse = pikachu.getBestFastAttacksForEnemy(false, "Bulbasaur");
-console.log(reponse);
+// let pikachu = Object.values(Pokemon.all_pokemons).find(p => p.nom === "Pikachu");
+// pikachu.getBestFastAttacksForEnemy(true, "Bulbasaur");
+// let reponse = pikachu.getBestFastAttacksForEnemy(false, "Bulbasaur");
+// console.log(reponse);
 
 //Q7. Fonction fastFight(pokemonNameA, pokemonNameB) affichant, dans la console, le déroulement d’un combat entre 2 pokemons. 
 // Ici vous devez utiliser console.table(). Chaque attaque est déterminée par getBestFastAttackForEnemy(false,pokemonName).
 function fastFight(pokemonNameA, pokemonNameB){
+    let pokemonA = Object.values(Pokemon.all_pokemons).find(p => p.nom === pokemonNameA);
+    let pokemonB = Object.values(Pokemon.all_pokemons).find(p => p.nom === pokemonNameB);
+    if (!pokemonA || !pokemonB) {
+        console.log("Aucun Pokémon trouvé avec le nom : " + (pokemonA ? pokemonNameB : pokemonNameA));
+        return;
+    }
 
+    let combat = [];
+    let tour = 1;
+    while (pokemonA.current_hp > 0 && pokemonB.current_hp > 0) {
+        let attaqueA = pokemonA.getBestFastAttacksForEnemy(false, pokemonB.nom);
+        let attaqueB = pokemonB.getBestFastAttacksForEnemy(false, pokemonA.nom);
 
-    
+        //calcul des dégâts
+        let degatsA = attaqueA.degats;
+        let degatsB = attaqueB.degats;
+
+        //application des dégâts
+        pokemonB.current_hp -= degatsA;
+        pokemonA.current_hp -= degatsB;
+
+        //enregistrement du tour dans le combat
+        combat.push({
+            tour: tour,
+            pokemonA: pokemonA.nom,
+            attaqueA: attaqueA.attaque.nom,
+            degatsA: degatsA.toFixed(3),
+            hpA: pokemonA.current_hp.toFixed(3),
+            pokemonB: pokemonB.nom,
+            attaqueB: attaqueB.attaque.nom,
+            degatsB: degatsB.toFixed(3),
+            hpB: pokemonB.current_hp.toFixed(3)
+        });
+
+        tour++;
+    }
+
+    //affichage du combat
+    console.table(combat);    
 }
 
-//fastFight("Bulbasaur", "Charmander");
+fastFight("Bulbasaur", "Charmander");
