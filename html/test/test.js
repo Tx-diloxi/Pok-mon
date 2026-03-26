@@ -171,7 +171,8 @@ function fastFight(pokemonNameA, pokemonNameB) {
             Tour: tour + 1,
             Attaquant: attaquant.nom,
             ATK: bestAttack.attaque.nom,
-            D
+            Défenseur: defenseur.nom,
+            DEF: ,
             "Type attaque": bestAttack.attaque.type,
             Puissance: bestAttack.attaque.puissance,
             Efficacité: bestAttack.efficacite.toFixed(3),
