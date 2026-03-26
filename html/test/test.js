@@ -122,7 +122,6 @@ function sortPokemonsByTypeThenName(){
 
 //Q7. Fonction fastFight(pokemonNameA, pokemonNameB) affichant, dans la console, le déroulement d’un combat entre 2 pokemons. 
 // Ici vous devez utiliser console.table(). Chaque attaque est déterminée par getBestFastAttackForEnemy(false,pokemonName).
-
 function fastFight(pokemonNameA, pokemonNameB) {
     //recup les Pokemons à partir de leurs noms
     const pokemonA = Object.values(Pokemon.all_pokemons).find(p => p.nom === pokemonNameA);
