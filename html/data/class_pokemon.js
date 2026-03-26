@@ -131,7 +131,9 @@ class Pokemon {
 function fill_pokemons() {
     //on parcourt la liste des pokémons pour créer des Pokemon et les stocker dans all_pokemons
     for (let i = 0; i < pokemons.length; i++) {
-        new Pokemon(pokemons[i].pokemon_name);
+        if (pokemons[i].form === "Normal") {
+            new Pokemon(pokemons[i].pokemon_name);
+        }
     }   
 }
 fill_pokemons();
