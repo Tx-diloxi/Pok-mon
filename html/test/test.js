@@ -124,8 +124,8 @@ function sortPokemonsByTypeThenName(){
 // Ici vous devez utiliser console.table(). Chaque attaque est déterminée par getBestFastAttackForEnemy(false,pokemonName).
 function fastFight(pokemonNameA, pokemonNameB) {
     //recup les Pokemons à partir de leurs noms
-    const pokemonA = Object.values(Pokemon.all_pokemons).find(p => p.nom === pokemonNameA);
-    const pokemonB = Object.values(Pokemon.all_pokemons).find(p => p.nom === pokemonNameB);
+    const pokemonA = Object.values(Pokemon.all_pokemons).find(p => p.nom == pokemonNameA);
+    const pokemonB = Object.values(Pokemon.all_pokemons).find(p => p.nom == pokemonNameB);
 
     //verif que les deux pokemons existent
     if (!pokemonA || !pokemonB) {
@@ -141,8 +141,8 @@ function fastFight(pokemonNameA, pokemonNameB) {
     let historique = []; //tab pour stocker le déroulement du combat
 
     while (hpA > 0 && hpB > 0) {
-        const attaquant = tour % 2 === 0 ? pokemonA : pokemonB;
-        const defenseur = tour % 2 === 0 ? pokemonB : pokemonA;
+        const attaquant = tour % 2 == 0 ? pokemonA : pokemonB;
+        const defenseur = tour % 2 == 0 ? pokemonB : pokemonA;
 
         //meilleure attaque rapide de l'attaquant contre le défenseur
         const bestAttack = attaquant.getBestFastAttacksForEnemy(false, defenseur.nom);
@@ -154,10 +154,10 @@ function fastFight(pokemonNameA, pokemonNameB) {
 
         //recup des dégâts bruts et arrondi à l'unité supérieure
         let degats = bestAttack.degats;
-        degats = Math.round(degats);
+        degats = Math.ceil(degats);
 
         //met a jour les hp du défenseur
-        if (tour % 2 === 0) {
+        if (tour % 2 == 0) {
             for (let i = 0; i < degats; i++) {
                 if (hpB > 0) {
                     hpB--;
@@ -172,7 +172,7 @@ function fastFight(pokemonNameA, pokemonNameB) {
         }
 
         //enregistrement du tour dans un tab au format demande
-        const reste = tour % 2 === 0 ? hpB : hpA; //PV du défenseur après l'attaque
+        const reste = tour % 2 == 0 ? hpB : hpA; //PV du défenseur après l'attaque
         historique.push({
             Tour: tour + 1,
             Attaquant: attaquant.nom,
@@ -193,7 +193,7 @@ function fastFight(pokemonNameA, pokemonNameB) {
 
 }
 
-//fastFight("Bulbasaur", "Charizard");
+fastFight("Bulbasaur", "Charizard");
 
 
 if (typeof window !== 'undefined'){
