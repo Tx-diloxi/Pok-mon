@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Partie 2</title>
+    <title>Pokédex Pro - Section 2</title>
     <link rel="stylesheet" href="style.css">
     <script src="data/pokemons.js"></script>
     <script src="data/pokemon_types.js"></script>
@@ -31,32 +31,31 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Identifiant unique</th>
+                            <th>ID</th>
                             <th>Nom</th>
                             <th>Génération</th>
                             <th>Types</th>
                             <th>Endurance</th>
-                            <th>Points d’attaque de base</th>
-                            <th>Points de défense de base</th>
+                            <th>Attaque</th>
+                            <th>Défense</th>
                             <th>Image</th>
                         </tr>
                     </thead>
                     <tbody>
-                    </tbody>
+                        </tbody>
                 </table>
             </section>
         </main>
     </div>
 
-    <!-- Popup Détails Pokémon -->
     <div id="pokemonDetailsPopup" class="popupOverlay" style="display: none;">
         <div class="popupCard">
             <button id="fermerPopup" class="fermerPopupBtn" type="button">✕</button>
-            <div id="popupContent" class="popupContent"></div>
+            <div id="popupContent" class="popupContent">
+                </div>
         </div>
     </div>
 
-    <!-- Popup Aperçu Image -->
     <div id="imagePreviewPopup" class="imagePreview" style="display: none;">
         <img id="imagePreviewImg" src="" alt="" />
     </div>

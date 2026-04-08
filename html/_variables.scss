@@ -1,60 +1,30 @@
-// Variables de style en français
-// Couleurs principales
-$couleur-texte: #102d1f;
-$couleur-texte-fonce: #172a22;
-$couleur-texte-secondaire: #374a34;
-$couleur-fond-principal: #f7f1c4;
-$couleur-fond-milieu: #dcd08c;
-$couleur-fond-bas: #a8a45b;
-$couleur-fond-entete: #ffffff;
-$couleur-entete: #ffcb05;
-$couleur-entete-fond: #edb92e;
-$couleur-bordure: rgba(23, 42, 34, 0.14);
-$couleur-bordure-claire: rgba(23, 42, 34, 0.12);
-$couleur-bordure-tableau: rgba(23, 42, 34, 0.18);
-$couleur-ligne-paire: rgba(255, 255, 255, 0.28);
-$couleur-ligne-impair: rgba(42, 75, 45, 0.08);
-$couleur-bouton: #2b502f;
-$couleur-bouton-hover: #4a7a4e;
-$couleur-bouton-desactive: #b0b9a8;
-$couleur-popup-badge: rgba(255, 203, 5, 0.4);
-$couleur-popup-badge-bordure: #ffcb05;
-$couleur-popup-texte: #1a3024;
-$couleur-popup-titre: #2f4e32;
-$couleur-popup-sous-titre: #374a34;
-$couleur-fond-overlay: rgba(0, 0, 0, 0.5);
+@use 'sass:color';
 
-// Typographie
-$police-principale: 'Verdana', Geneva, Tahoma, sans-serif;
-$taille-titre: clamp(1.5rem, 2vw, 2rem);
-$taille-texte: 0.96rem;
-$taille-texte-entete: 0.95rem;
-$taille-texte-popup: 0.95rem;
+// 1. Typographie (C'est ici que $police-principale est définie)
+$police-principale: 'Inter', 'Segoe UI', system-ui, sans-serif;
 
-// Espacements
-$espace-page: 24px 16px 32px;
-$espace-page-mobile: 20px 12px 24px;
-$espace-entete: 18px 22px;
-$espace-cellule: 14px 12px;
-$espace-entete-cellule: 16px 14px;
-$espace-popup: 32px 36px;
-$espace-popbtn: 8px 12px;
-$espace-bouton: 10px 16px;
-$espace-detail: 6px 0;
+// 2. Palette Laboratoire & Pokédex
+$couleur-fond-haut: #eef2f7; 
+$couleur-grille: rgba(55, 97, 168, 0.08);
 
-// Formes et ombres
-$rayon-cadre: 18px;
-$rayon-bouton: 999px;
-$rayon-popup: 20px;
-$rayon-image: 12px;
-$ombre-tableau: 0 0 0 8px rgba(255, 255, 255, 0.15), 0 18px 40px rgba(0, 0, 0, 0.25);
-$ombre-carte: 0 20px 60px rgba(0, 0, 0, 0.35);
-$ombre-image: 0 8px 24px rgba(0, 0, 0, 0.4);
+$couleur-pokedex-rouge: #ef5350;
+$couleur-pokedex-rouge-fonce: #c62828;
+$couleur-pokedex-bleu: #3761a8;
+$couleur-pokedex-jaune: #feca1b;
 
-// Tailles
-$largeur-max-page: min(100%, 1100px);
-$largeur-image-max: 80px;
-$largeur-image-preview-max: 250px;
-$hauteur-bordure: 6px;
-$hauteur-bordure-entete: 4px;
-$taille-grille: 40px;
+// 3. Couleurs de Texte
+$couleur-texte-titre: #1a237e;      
+$couleur-texte-principal: #263238;  
+$couleur-texte-label: #546e7a;      
+$couleur-texte-valeur: #263238;     
+
+// 4. Dimensions et Formes
+$rayon-cadre: 20px;
+$rayon-bouton: 12px;
+$rayon-popup: 28px;
+$largeur-max-page: 1400px; 
+
+// 5. Ombres
+$ombre-portee: 0 12px 40px rgba(0, 0, 0, 0.1);
+$ombre-pokedex: 0 15px 35px rgba(239, 83, 80, 0.35);
+$ombre-popup: 0 40px 100px rgba(13, 26, 38, 0.4);
