@@ -1,4 +1,4 @@
-const TAILLE_PAGE = 25;
+const MAX_POKEMON_PAGE = 25;
 let pageActuelle = 1;
 let nombrePages = 1;
 let pokemonsNormaux = [];
@@ -29,7 +29,7 @@ function initialiserDonnees() {
         .filter(pokemon => pokemon.form === 'Normal')
         .sort((a, b) => a.pokemon_id - b.pokemon_id);
 
-    nombrePages = Math.max(1, Math.ceil(pokemonsNormaux.length / TAILLE_PAGE));
+    nombrePages = Math.max(1, Math.ceil(pokemonsNormaux.length / MAX_POKEMON_PAGE));
 }
 
 function mettreAJourAffichagePagination() {
@@ -74,8 +74,8 @@ function creerTableauPokemons() {
         return;
     }
 
-    const indexDebut = (pageActuelle - 1) * TAILLE_PAGE;
-    const pokemonsPage = pokemonsNormaux.slice(indexDebut, indexDebut + TAILLE_PAGE);
+    const indexDebut = (pageActuelle - 1) * MAX_POKEMON_PAGE;
+    const pokemonsPage = pokemonsNormaux.slice(indexDebut, indexDebut + MAX_POKEMON_PAGE);
 
     pokemonsPage.forEach(pokemon => tbody.appendChild(creerLignePokemon(pokemon)));
 }
