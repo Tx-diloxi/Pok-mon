@@ -1,10 +1,3 @@
-const Class = window.Class || {
-    pokemons: [],
-    pokemon_types: [],
-    getNormalPokemons: () => [],
-    getNormalTypesById: () => ({})
-};
-
 const MAX_POKEMON_PAGE = 25;
 let pageActuelle = 1;
 let nombrePages = 1;
@@ -26,9 +19,14 @@ const obtenirGenerationDepuisId = idPokemon => {
 const formaterTypes = types => types.join(' / ');
 
 function initialiserDonnees() {
-    typesNormauxParId = Class.getNormalTypesById();
+    pokemon_types
+        .filter(pokemon => pokemon.form === 'Normal')
+        .forEach(pokemon => {
+            typesNormauxParId[pokemon.pokemon_id] = pokemon.type;
+        });
 
-    pokemonsNormaux = Class.getNormalPokemons()
+    pokemonsNormaux = pokemons
+        .filter(pokemon => pokemon.form === 'Normal')
         .sort((a, b) => a.pokemon_id - b.pokemon_id);
 
     nombrePages = Math.max(1, Math.ceil(pokemonsNormaux.length / MAX_POKEMON_PAGE));
@@ -101,4 +99,3 @@ document.addEventListener('DOMContentLoaded', () => {
     lierEvenementsPagination();
     allerAUnePage(1);
 });
-
