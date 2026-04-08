@@ -5,7 +5,7 @@ console.log("Pokemon 1 (Bulbasaur)");
 console.log(Pokemon.all_pokemons[1].toString());
 console.log("-------------------");
 console.log("Pokemons Grass");
-console.log(getPokemonsByType('Grass'))
+getPokemonsByType('Grass');
 console.log("-------------------");
 console.log("Attaque 210 (Wing Attack)");
 console.log(Attack.all_attacks[210].toString());
