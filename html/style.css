@@ -1,0 +1,97 @@
+
+html, body {
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Verdana', Geneva, Tahoma, sans-serif;
+    color: #102d1f;
+    background: radial-gradient(circle at top left, rgba(247, 236, 149, 0.45), transparent 22%),
+                radial-gradient(circle at bottom right, rgba(241, 77, 59, 0.35), transparent 18%),
+                linear-gradient(180deg, #f7f1c4 0%, #dcd08c 50%, #a8a45b 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 32px;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px),
+                      linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: -1;
+}
+
+table {
+    width: min(100%, 1100px);
+    border-collapse: collapse;
+    border: 6px solid #172a22;
+    box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.15), 0 18px 40px rgba(0, 0, 0, 0.25);
+    background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(222, 213, 145, 0.96));
+}
+
+thead th {
+    padding: 16px 14px;
+    border-bottom: 4px solid #102d1f;
+    background: linear-gradient(180deg, #ffcb05 0%, #edb92e 100%);
+    color: #172a22;
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+tbody tr {
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+tbody tr:hover {
+    transform: translateX(4px);
+    background-color: rgba(255, 255, 255, 0.55);
+}
+
+tbody tr:nth-child(odd) {
+    background-color: rgba(42, 75, 45, 0.08);
+}
+
+tbody tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.28);
+}
+
+td {
+    padding: 14px 12px;
+    border-top: 1px solid rgba(23, 42, 34, 0.18);
+    border-right: 1px solid rgba(23, 42, 34, 0.12);
+    color: #1a3024;
+    font-size: 0.96rem;
+}
+
+td:last-child {
+    text-align: center;
+}
+
+tbody td:first-child {
+    font-weight: 700;
+    color: #2f4e32;
+}
+
+img {
+    display: block;
+    max-width: 80px;
+    height: auto;
+    margin: 0 auto;
+}
+
+@media (max-width: 940px) {
+    table {
+        font-size: 0.92rem;
+    }
+    thead th, td {
+        padding: 12px 10px;
+    }
+}
