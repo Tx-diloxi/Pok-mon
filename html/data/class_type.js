@@ -1,4 +1,5 @@
 import type_effectiveness from "./type_effectiveness.js";
+//importe la table d'efficacite des types
 
 //console.table(type_effectiveness);
 //console.log(type_effectiveness["Fire"]);
@@ -48,6 +49,7 @@ class Type {
 //à partir de la source de données, crée des objets Type stockez dans all_types.
 function fill_types() {
     for (let nomtype in type_effectiveness) {
+        //cree un objet Type pour chaque type present dans les donnees
         new Type(nomtype);
     }
 }

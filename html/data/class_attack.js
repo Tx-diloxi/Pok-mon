@@ -4,6 +4,7 @@ import fast_moves from "./fast_moves.js";
 
 import charged_moves from "./charged_moves.js";
 
+//importe les donnees des attaques rapides et chargees
 class Attack {
     static all_attacks = {};
     
@@ -22,7 +23,7 @@ class Attack {
     }
 }
 
-//à partir de la source de données, crée des objets Type que vous stockez dans all_types
+//a partir de la source de donnees, cree des objets Attack et les stocke
 function fill_attacks() {
     //on parcourt les listes d'attaques rapides pour créer des Attack et les stocker dans all_attacks
     for (let i = 0; i < fast_moves.length; i++) {

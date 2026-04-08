@@ -5,6 +5,7 @@ import pokemon_moves from "./pokemon_moves.js";
 import pokemons from "./pokemons.js";
 
 import pokemon_types from "./pokemon_types.js";
+//importe les types et mouvements des pokemons
 
 class Pokemon {
     static all_pokemons = {};
@@ -15,6 +16,7 @@ class Pokemon {
         let lesTypesDuPokemon = pokemon_types.find(p => p.pokemon_name == nom && p.form == "Normal");
         let lesAttauquesDuPokemon = pokemon_moves.find(p => p.pokemon_name == nom && p.form == "Normal");
         
+        //initialise les proprietes du Pokemon depuis les donnees trouvees
         
         this.idPokemon = lesInfosDuPokemon.pokemon_id;
         this.nom = nom;
@@ -41,6 +43,7 @@ class Pokemon {
     getAttacks() {
         let attaques = this.nomAttaqueRapides.concat(this.nomAttaqueChargees);
 
+        //remplace les noms d'attaques par les objets Attack
         for (let i = 0; i < attaques.length; i++) {
             let nomAttaque = attaques[i];
             for (let attaque in Attack.all_attacks) {
@@ -70,6 +73,7 @@ class Pokemon {
         let maxEfficiency = 0;
         let listePokemonsEfficaces = [];
 
+        //parcourt tous les pokemons pour calculer l'efficacite
         for (let idPokemon in Pokemon.all_pokemons) {
             let lePokemon = Pokemon.all_pokemons[idPokemon];
             let efficacite = 1;
@@ -147,6 +151,7 @@ function fill_pokemons() {
     //on parcourt la liste des pokémons pour créer des Pokemon et les stocker dans all_pokemons
     for (let i = 0; i < pokemons.length; i++) {
         if (pokemons[i].form === "Normal") {
+            //cree l'objet Pokemon pour ce nom
             new Pokemon(pokemons[i].pokemon_name);
         }
     }   

@@ -1,10 +1,12 @@
 const MAX_POKEMON_PAGE = 25;
+//nombre maximal de pokemons par page
 let pageActuelle = 1;
 let nombrePages = 1;
 let pokemonsNormaux = [];
 let typesNormauxParId = {};
 let mouvementsNormauxParId = {};
 
+//determine la generation a partir de l'id du pokemon
 const obtenirGenerationDepuisId = idPokemon => {
     if (idPokemon <= 151) return 'Génération I';
     if (idPokemon <= 251) return 'Génération II';
@@ -17,9 +19,11 @@ const obtenirGenerationDepuisId = idPokemon => {
     return 'Génération IX+';
 };
 
+//formate la liste de types pour l'affichage
 const formaterTypes = types => types.join(' / ');
 
 function initialiserDonnees() {
+    //initialise les tables utilisees pour l'affichage
     pokemon_types
         .filter(pokemon => pokemon.form === 'Normal')
         .forEach(pokemon => {
@@ -45,6 +49,7 @@ function initialiserDonnees() {
 }
 
 function mettreAJourAffichagePagination() {
+    //met a jour les controles et l'etiquette de pagination
     const infoPage = document.getElementById('infoPage');
     const precedent = document.getElementById('precedentHaut');
     const suivant = document.getElementById('suivantHaut');
@@ -56,6 +61,7 @@ function mettreAJourAffichagePagination() {
 }
 
 function creerLignePokemon(pokemon) {
+    //cree une ligne de tableau HTML pour un pokemon
     const types = typesNormauxParId[pokemon.pokemon_id] || [];
     const idImage = String(pokemon.pokemon_id).padStart(3, '0');
     const sourceImage = `webp/images/${idImage}.webp`;
@@ -86,6 +92,7 @@ function creerLignePokemon(pokemon) {
 }
 
 function creerTableauPokemons() {
+    //remplit le tbody avec les pokemons de la page courante
     const tbody = document.querySelector('tbody');
     if (!tbody) return;
 
@@ -103,12 +110,14 @@ function creerTableauPokemons() {
 }
 
 function allerAUnePage(numeroPage) {
+    //change la page courante et met a jour l'affichage
     pageActuelle = Math.min(Math.max(numeroPage, 1), nombrePages);
     creerTableauPokemons();
     mettreAJourAffichagePagination();
 }
 
 function lierEvenementsPagination() {
+    //associe les boutons precedent/suivant aux actions de pagination
     const precedent = document.getElementById('precedentHaut');
     const suivant = document.getElementById('suivantHaut');
 
@@ -117,6 +126,7 @@ function lierEvenementsPagination() {
 }
 
 function afficherPopupDetails(pokemon) {
+    //construit et affiche le contenu du popup de details
     const types = typesNormauxParId[pokemon.pokemon_id] || [];
     const mouvements = mouvementsNormauxParId[pokemon.pokemon_id] || {};
     
@@ -211,6 +221,7 @@ function afficherPopupDetails(pokemon) {
 }
 
 function masquerPopupDetails() {
+    //cache le popup de details
     const popup = document.getElementById('pokemonDetailsPopup');
     if (popup) {
         popup.style.display = 'none';
@@ -218,6 +229,7 @@ function masquerPopupDetails() {
 }
 
 function afficherAperçuImage(event, sourceImage, nomPokemon) {
+    //affiche un apercu d'image a cote de la miniature
     const preview = document.getElementById('imagePreviewPopup');
     const previewImg = document.getElementById('imagePreviewImg');
     
@@ -233,6 +245,7 @@ function afficherAperçuImage(event, sourceImage, nomPokemon) {
 }
 
 function masquerAperçuImage() {
+    //cache l'aperçu d'image
     const preview = document.getElementById('imagePreviewPopup');
     if (preview) {
         preview.style.display = 'none';
@@ -240,6 +253,7 @@ function masquerAperçuImage() {
 }
 
 function lierEvenementsFermeture() {
+    //lie les evenements pour fermer le popup (bouton, click en dehors, echap)
     const fermerBtn = document.getElementById('fermerPopup');
     const popup = document.getElementById('pokemonDetailsPopup');
 
@@ -263,6 +277,7 @@ function lierEvenementsFermeture() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    //initialise l'app une fois le DOM charge
     initialiserDonnees();
     lierEvenementsPagination();
     lierEvenementsFermeture();
