@@ -9290,6 +9290,3 @@ const pokemon_types =
             ]
         }
     ];
-
-
-export default pokemon_types;

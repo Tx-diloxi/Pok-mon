@@ -8753,6 +8753,3 @@ const pokemons =
             "pokemon_name": "Calyrex"
         }
     ];
-
-
-export default pokemons;
