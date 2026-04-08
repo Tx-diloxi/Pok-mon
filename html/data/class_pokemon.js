@@ -163,4 +163,3 @@ fill_pokemons();
 
 //console.table(new Pokemon("Bulbasaur").getAttacks());
 
-export default Pokemon;

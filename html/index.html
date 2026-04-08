@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="data/pokemons.js"></script>
     <script src="data/pokemon_types.js"></script>
+    <script src="data/pokemon_moves.js"></script>
     <script src="js/script.js"></script>
 </head>
 <body>
@@ -45,6 +46,19 @@
                 </table>
             </section>
         </main>
+    </div>
+
+    <!-- Popup Détails Pokémon -->
+    <div id="pokemonDetailsPopup" class="popupOverlay" style="display: none;">
+        <div class="popupCard">
+            <button id="fermerPopup" class="fermerPopupBtn" type="button">✕</button>
+            <div id="popupContent" class="popupContent"></div>
+        </div>
+    </div>
+
+    <!-- Popup Aperçu Image -->
+    <div id="imagePreviewPopup" class="imagePreview" style="display: none;">
+        <img id="imagePreviewImg" src="" alt="" />
     </div>
 </body>
 </html>

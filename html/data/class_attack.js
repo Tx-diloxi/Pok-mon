@@ -47,4 +47,3 @@ fill_attacks();
 //test après ajout d'une attaque personnalisée
 //console.table(Attack.all_attacks);
 
-export default Attack;

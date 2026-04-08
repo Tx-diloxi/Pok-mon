@@ -1772,4 +1772,3 @@ const charged_moves =
 }
 ]
 
-export default charged_moves;

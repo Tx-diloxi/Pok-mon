@@ -362,4 +362,3 @@ const type_effectiveness =
     }
 };
 
-export default type_effectiveness;

@@ -632,4 +632,3 @@ const fast_moves =
         }
     ];
 
-export default fast_moves;

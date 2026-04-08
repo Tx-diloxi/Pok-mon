@@ -59,4 +59,3 @@ fill_types();
 //test la methode toString() avec un exemple de type
 //console.log(new Type("Dark").toString());
 
-export default Type;
