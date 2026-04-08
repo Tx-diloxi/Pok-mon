@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,26 +10,41 @@
     <script src="js/script.js"></script>
 </head>
 <body>
-    <table>
+    <div id="conteneurPage">
+        <header id="headerPrincipal">
+            <div class="header-contenu">
+                <div>
+                    <h1>Liste des Pokémons</h1>
+                </div>
 
-        <thead>
-            <tr>
-                <th>Identifiant unique</th>
-                <th>Nom</th>
-                <th>Génération</th>
-                <th>Types</th>
-                <th>Endurance</th>
-                <th>Points d’attaque de base</th>
-                <th>Points de défense de base</th>
-                <th>Image</th>
-            </tr>
-        </thead>
+                <nav id="paginationHaut">
+                    <button id="precedentHaut" type="button">PRÉC</button>
+                    <span id="infoPage">Page 1 / 1</span>
+                    <button id="suivantHaut" type="button">SUIV</button>
+                </nav>
+            </div>
+        </header>
 
-        <tbody>
-            
-        </tbody>
-
-    </table>
-    
+        <main>
+            <section id="conteneurTableau">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Identifiant unique</th>
+                            <th>Nom</th>
+                            <th>Génération</th>
+                            <th>Types</th>
+                            <th>Endurance</th>
+                            <th>Points d’attaque de base</th>
+                            <th>Points de défense de base</th>
+                            <th>Image</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
 </body>
 </html>

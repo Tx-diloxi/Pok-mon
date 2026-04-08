@@ -11,10 +11,7 @@ body {
     background: radial-gradient(circle at top left, rgba(247, 236, 149, 0.45), transparent 22%),
                 radial-gradient(circle at bottom right, rgba(241, 77, 59, 0.35), transparent 18%),
                 linear-gradient(180deg, #f7f1c4 0%, #dcd08c 50%, #a8a45b 100%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 32px;
+    margin: 0;
 }
 
 body::before {
@@ -28,8 +25,60 @@ body::before {
     z-index: -1;
 }
 
-table {
+#conteneurPage {
     width: min(100%, 1100px);
+    margin: 0 auto;
+    padding: 24px 16px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+#headerPrincipal {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(23, 42, 34, 0.14);
+    border-radius: 18px;
+    box-shadow: 0 14px 40px rgba(16, 45, 31, 0.12);
+    padding: 18px 22px;
+}
+
+.header-contenu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+}
+
+#headerPrincipal h1 {
+    margin: 0;
+    font-size: clamp(1.5rem, 2vw, 2rem);
+    letter-spacing: 0.05em;
+}
+
+#headerPrincipal p {
+    margin: 8px 0 0;
+    color: #374a34;
+    max-width: 520px;
+}
+
+main {
+    width: 100%;
+}
+
+#conteneurTableau {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+table {
+    width: 100%;
     border-collapse: collapse;
     border: 6px solid #172a22;
     box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.15), 0 18px 40px rgba(0, 0, 0, 0.25);
@@ -87,11 +136,62 @@ img {
     margin: 0 auto;
 }
 
+#paginationHaut {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    padding: 0;
+}
+
+#paginationHaut button {
+    border: none;
+    background-color: #2b502f;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    font-weight: 700;
+}
+
+#paginationHaut button:hover:not(:disabled) {
+    background-color: #4a7a4e;
+    transform: translateY(-1px);
+}
+
+#paginationHaut button:disabled {
+    background-color: #b0b9a8;
+    cursor: not-allowed;
+}
+
+#paginationHaut span {
+    font-size: 0.95rem;
+    color: #172a22;
+    font-weight: 700;
+}
+
 @media (max-width: 940px) {
+    #conteneurPage {
+        padding: 20px 12px 24px;
+    }
+
+    .header-contenu {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #paginationHaut {
+        justify-content: space-between;
+    }
+
     table {
         font-size: 0.92rem;
     }
-    thead th, td {
+
+    thead th,
+    td {
         padding: 12px 10px;
     }
 }
+
