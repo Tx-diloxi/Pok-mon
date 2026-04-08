@@ -79,6 +79,7 @@ main {
 
 table {
     width: 100%;
+    text-align: center;
     border-collapse: collapse;
     border: 6px solid #172a22;
     box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.15), 0 18px 40px rgba(0, 0, 0, 0.25);
