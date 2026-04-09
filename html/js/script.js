@@ -154,28 +154,6 @@ function afficherPopupDetails(pokemon) {
         `;
     }
 
-    if (mouvements.elite_fast_moves && mouvements.elite_fast_moves.length > 0) {
-        contenuMovements += `
-            <div class="detailSection">
-                <h3>Attaques élites rapides</h3>
-                <div class="movesList">
-                    ${mouvements.elite_fast_moves.map(move => `<span class="moveBadge">${move}</span>`).join('')}
-                </div>
-            </div>
-        `;
-    }
-
-    if (mouvements.elite_charged_moves && mouvements.elite_charged_moves.length > 0) {
-        contenuMovements += `
-            <div class="detailSection">
-                <h3>Attaques élites chargées</h3>
-                <div class="movesList">
-                    ${mouvements.elite_charged_moves.map(move => `<span class="moveBadge">${move}</span>`).join('')}
-                </div>
-            </div>
-        `;
-    }
-
     const htmlPopup = `
         <h2>${pokemon.pokemon_name}</h2>
         <div class="detailSection">
