@@ -165,8 +165,8 @@ table tbody tr:hover img.pokemonThumbnail {
   background: white;
   border-radius: 28px;
   padding: 40px;
-  width: 90%;
-  max-width: 650px;
+  width: 60%;
+  max-width: 60%;
   position: relative;
   box-shadow: 0 40px 100px rgba(13, 26, 38, 0.4);
   border: 4px solid #ef5350;
