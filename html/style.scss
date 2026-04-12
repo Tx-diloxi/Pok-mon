@@ -1,7 +1,6 @@
 @use 'sass:color';
 @use 'variables' as *;
 
-/* ===== GLOBAL & FOND VERTICAL ROUGE EN BAS ===== */
 * { box-sizing: border-box; }
 
 body {
@@ -9,17 +8,15 @@ body {
   color: $couleur-texte-principal;
   margin: 0;
   min-height: 100vh;
-  
-  // Dégradé de haut en bas : Bleu tech -> Blanc -> Rouge Pokédex
-  background: linear-gradient(to bottom, 
-                $couleur-fond-haut 0%, 
-                #ffffff 45%, 
-                rgba($couleur-pokedex-rouge, 0.6) 80%, 
+
+  background: linear-gradient(to bottom,
+                $couleur-fond-haut 0%,
+                #ffffff 45%,
+                rgba($couleur-pokedex-rouge, 0.6) 80%,
                 $couleur-pokedex-rouge 100%);
   background-attachment: fixed;
 }
 
-// Grille de laboratoire
 body::before {
   content: '';
   position: fixed;
@@ -39,7 +36,6 @@ body::before {
   gap: 30px;
 }
 
-/* ===== HEADER ===== */
 #headerPrincipal {
   background: linear-gradient(135deg, $couleur-pokedex-rouge 0%, $couleur-pokedex-rouge-fonce 100%);
   border-radius: $rayon-cadre;
@@ -49,7 +45,7 @@ body::before {
   position: sticky;
   top: 15px;
   z-index: 100;
-  
+
   h1 {
     margin: 0;
     color: white;
@@ -68,7 +64,6 @@ body::before {
   gap: 20px;
 }
 
-/* ===== PAGINATION ===== */
 #paginationHaut {
   display: flex;
   align-items: center;
@@ -107,7 +102,6 @@ body::before {
   }
 }
 
-/* ===== TABLEAU LARGE ===== */
 #conteneurTableau {
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(10px);
@@ -121,7 +115,7 @@ table {
   width: 100%;
   border-collapse: collapse;
   text-align: center;
-  
+
   thead {
     background-color: $couleur-pokedex-bleu;
     th {
@@ -136,7 +130,7 @@ table {
   tbody tr {
     border-bottom: 1px solid #edf2f7;
     transition: all 0.2s ease;
-    
+
     &:hover {
       background-color: rgba($couleur-pokedex-rouge, 0.05);
       cursor: pointer;
@@ -146,7 +140,7 @@ table {
       padding: 15px;
       &:first-child { font-weight: 800; color: $couleur-pokedex-bleu; font-family: monospace; }
       &:nth-child(2) { font-weight: 700; color: $couleur-texte-titre; font-size: 1.2rem; }
-      
+
       img.pokemonThumbnail {
         max-width: 85px;
         filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
@@ -167,7 +161,7 @@ table thead th {
   .fleche-tri {
     display: inline-block;
     margin-left: 8px;
-    font-size: 0.7rem; 
+    font-size: 0.7rem;
     color: $couleur-pokedex-jaune;
     vertical-align: middle;
   }
@@ -178,7 +172,6 @@ table thead th {
   }
 }
 
-/* ===== POPUP DE DÉTAILS (INFO CLIQUEE) ===== */
 .superpositionPopup {
   position: fixed; inset: 0;
   background: rgba(13, 26, 38, 0.8);
@@ -206,7 +199,7 @@ table thead th {
   width: 45px; height: 45px;
   font-size: 1.5rem; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  
+
   &:hover { background: $couleur-pokedex-rouge; color: white; transform: rotate(90deg); }
 }
 
@@ -265,25 +258,23 @@ table thead th {
   }
 }
 
-/* ===== APERÇU IMAGE (HOVER) - ESSENTIEL POUR LE JS ===== */
 .apercuImage {
-  position: fixed;        
-  z-index: 1100;          
-  pointer-events: none;   
-  display: none;          // Géré par script.js (bloc ou none)
+  position: fixed;
+  z-index: 1100;
+  pointer-events: none;
+  display: none;
 
   img {
-    // NOUVEAU : On augmente un peu la taille pour l'effet "milieu"
-    max-width: 300px; 
+
+    max-width: 300px;
     background: white;
-    border: 10px solid $couleur-pokedex-jaune; // Bordure un peu plus épaisse
+    border: 10px solid $couleur-pokedex-jaune;
     border-radius: 20px;
-    box-shadow: 0 30px 70px rgba(0,0,0,0.5); // Ombre plus profonde pour décoller du fond
+    box-shadow: 0 30px 70px rgba(0,0,0,0.5);
     padding: 15px;
   }
 }
 
-/* ===== ZONE DE FILTRAGE ===== */
 .filtreContainer {
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(10px);
@@ -292,7 +283,7 @@ table thead th {
   box-shadow: $ombre-portee;
   border: 1px solid white;
   display: flex;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
   gap: 20px;
   align-items: flex-end;
   margin-bottom: 10px;
@@ -301,7 +292,7 @@ table thead th {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    flex: 1; 
+    flex: 1;
     min-width: 200px;
 
     label {
@@ -338,12 +329,11 @@ table thead th {
   }
 }
 
-/* ===== RESPONSIVE FILTRES ===== */
 @media (max-width: 768px) {
   .filtreContainer {
     padding: 20px;
     gap: 15px;
-    flex-direction: column; // Empilement vertical sur mobile
+    flex-direction: column;
 
     .filtreGroup {
       width: 100%;
@@ -352,36 +342,33 @@ table thead th {
   }
 }
 
-/* ===== ANIMATIONS ===== */
 @keyframes slideIn {
   from { opacity: 0; transform: translateY(50px) scale(0.9); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 900px) {
   #headerPrincipal { padding: 20px; }
   .header-contenu { flex-direction: column; text-align: center; }
-  table { 
-    display: block; 
-    overflow-x: auto; 
+  table {
+    display: block;
+    overflow-x: auto;
   }
 }
 
-/* ===== RESPONSIVE POPUP ===== */
 @media (max-width: 768px) {
   .cartePopup {
-    width: 92%;           
+    width: 92%;
     max-width: 95%;
-    padding: 20px;        
-    max-height: 90vh;     
-    overflow-y: auto;     
+    padding: 20px;
+    max-height: 90vh;
+    overflow-y: auto;
     border-radius: 15px;
   }
 
   .contenuPopup {
     h2 {
-      font-size: 1.8rem; 
+      font-size: 1.8rem;
       padding-left: 12px;
     }
 
@@ -398,7 +385,7 @@ table thead th {
       flex-direction: column;
       gap: 5px;
       align-items: flex-start;
-      
+
       span {
         font-size: 1rem;
       }
@@ -413,7 +400,6 @@ table thead th {
   }
 }
 
-/* ===== RESPONSIVE IMAGE PREVIEW ===== */
 @media (max-width: 1024px) {
   .apercuImage {
     display: none !important;
@@ -422,10 +408,10 @@ table thead th {
 
 @media (max-width: 600px) {
   table {
-    th:nth-child(3), td:nth-child(3), // Génération
-    th:nth-child(5), td:nth-child(5), // Endurance
-    th:nth-child(6), td:nth-child(6), // Attaque
-    th:nth-child(7), td:nth-child(7)  // Défense
+    th:nth-child(3), td:nth-child(3),
+    th:nth-child(5), td:nth-child(5),
+    th:nth-child(6), td:nth-child(6),
+    th:nth-child(7), td:nth-child(7)
     {
       display: none;
     }

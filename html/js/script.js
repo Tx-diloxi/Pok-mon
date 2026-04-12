@@ -38,12 +38,12 @@ class PokemonPartie2 {
         return 'Génération IX+';
     }
 
-    // Formate la liste de types pour l'affichage
+    //formate les types pour l'affichage
     static formaterTypes(types) {
         return types.join(' / ');
     }
 
-    // Normalise un texte pour la comparaison (sans casse, sans accents)
+    //normalise texte en supprimant les accents et en le mettant en minuscules pour faciliter les comparaisons
     static normaliserTexte(texte) {
         return texte
             .normalize('NFD')
