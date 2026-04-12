@@ -160,6 +160,24 @@ table {
   }
 }
 
+table thead th {
+  position: relative;
+  transition: background-color 0.2s;
+
+  .tri-arrow {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 0.7rem; 
+    color: $couleur-pokedex-jaune;
+    vertical-align: middle;
+  }
+
+  &:hover {
+    background-color: color.adjust($couleur-pokedex-bleu, $lightness: 10%);
+    cursor: pointer;
+  }
+}
+
 /* ===== POPUP DE DÉTAILS (INFO CLIQUEE) ===== */
 .popupOverlay {
   position: fixed; inset: 0;
@@ -274,17 +292,17 @@ table {
   box-shadow: $ombre-portee;
   border: 1px solid white;
   display: flex;
-  flex-wrap: wrap; // Permet de passer à la ligne sur mobile
+  flex-wrap: wrap; 
   gap: 20px;
-  align-items: flex-end; // Aligne les labels et les champs en bas
+  align-items: flex-end;
   margin-bottom: 10px;
 
   .filtreGroup {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    flex: 1; // Les champs grandissent pour remplir l'espace
-    min-width: 200px; // Évite que les champs soient trop étroits
+    flex: 1; 
+    min-width: 200px;
 
     label {
       font-size: 0.85rem;
@@ -313,7 +331,6 @@ table {
       }
     }
 
-    // Style spécifique pour l'input de recherche par nom
     input[type="text"]::placeholder {
       color: #94a3b8;
       font-style: italic;

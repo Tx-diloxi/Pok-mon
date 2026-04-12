@@ -16,6 +16,11 @@ class PokemonManager {
         this.filtreNomActuel = '';
         this.tousLesTypesDisponibles = new Set();
         this.toutesLesAttaquesRapides = new Set();
+
+        this.triActuel = {
+            colonne: null, // ID de la colonne (ex: 'pokemon_id', 'pokemon_name')
+            direction: 1   // 1 pour croissant, -1 pour décroissant
+        };
     }
 
     // Détermine la génération à partir de l'ID du Pokémon
@@ -88,6 +93,88 @@ class PokemonManager {
         this.lierEvenementsFermeture();
         this.lierEvenementsFiltre();
         this.allerAUnePage(1);
+
+        this.lierEvenementsTri();
+        this.allerAUnePage(1);
+    }
+
+    // Méthode pour gérer les clics sur les en-têtes
+    lierEvenementsTri() {
+        const self = this;
+        const mapping = [
+            'pokemon_id', 
+            'pokemon_name', 
+            'generation', 
+            'types', 
+            'base_stamina', 
+            'base_attack', 
+            'base_defense'
+        ];
+
+        $('#conteneurTableau thead th').not(':last-child').on('click', function() {
+            const index = $(this).index();
+            const critere = mapping[index];
+            
+            // Exécuter le tri
+            self.trier(critere);
+            
+            // --- GESTION VISUELLE DES FLÈCHES ---
+            // On retire le gras et la flèche de tous les headers
+            const tousLesHeaders = $('#conteneurTableau thead th');
+            tousLesHeaders.css('font-weight', 'normal').find('.tri-arrow').remove();
+            
+            // On met en gras le header actuel
+            $(this).css('font-weight', '900');
+            
+            // On ajoute la flèche correspondante
+            // Direction 1 = Croissant (A-Z, 0-9) -> Flèche vers le haut
+            // Direction -1 = Décroissant (Z-A, 9-0) -> Flèche vers le bas
+            const fleche = self.triActuel.direction === 1 ? ' ▲' : ' ▼';
+            
+            // On crée un petit span pour la flèche
+            $(this).append(`<span class="tri-arrow">${fleche}</span>`);
+        });
+    }
+
+    // Logique de tri
+    trier(critere) {
+        // Si on reclique sur la même colonne, on inverse l'ordre
+        if (this.triActuel.colonne === critere) {
+            this.triActuel.direction *= -1;
+        } else {
+            this.triActuel.colonne = critere;
+            this.triActuel.direction = 1; // Par défaut croissant
+        }
+
+        this.pokemonsFiltres.sort((a, b) => {
+            let valA, valB;
+
+            // Extraction des valeurs selon le critère
+            if (critere === 'types') {
+                valA = (this.typesNormauxParId[a.pokemon_id] || []).join('');
+                valB = (this.typesNormauxParId[b.pokemon_id] || []).join('');
+            } else if (critere === 'generation') {
+                valA = PokemonManager.obtenirGeneration(a.pokemon_id);
+                valB = PokemonManager.obtenirGeneration(b.pokemon_id);
+            } else {
+                valA = a[critere];
+                valB = b[critere];
+            }
+
+            // Comparaison principale
+            if (valA < valB) return -1 * this.triActuel.direction;
+            if (valA > valB) return 1 * this.triActuel.direction;
+
+            // En cas d'égalité, tri par NOM (toujours croissant par défaut)
+            if (a.pokemon_name < b.pokemon_name) return -1;
+            if (a.pokemon_name > b.pokemon_name) return 1;
+            
+            return 0;
+        });
+
+        this.pageActuelle = 1; // Revenir en page 1 après un tri
+        this.creerTableauPokemons();
+        this.mettreAJourAffichagePagination();
     }
 
     // Met à jour les contrôles et l'étiquette de pagination

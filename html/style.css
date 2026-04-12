@@ -149,6 +149,22 @@ table tbody tr:hover img.pokemonThumbnail {
   transform: scale(1.2) rotate(5deg);
 }
 
+table thead th {
+  position: relative;
+  transition: background-color 0.2s;
+}
+table thead th .tri-arrow {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 0.7rem;
+  color: #feca1b;
+  vertical-align: middle;
+}
+table thead th:hover {
+  background-color: rgb(77.2062780269, 121.6547085202, 196.7937219731);
+  cursor: pointer;
+}
+
 /* ===== POPUP DE DÉTAILS (INFO CLIQUEE) ===== */
 .popupOverlay {
   position: fixed;
