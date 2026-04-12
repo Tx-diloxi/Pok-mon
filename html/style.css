@@ -303,4 +303,54 @@ table tbody tr:hover img.pokemonThumbnail {
     display: block;
     overflow-x: auto;
   }
+}
+/* ===== RESPONSIVE POPUP ===== */
+@media (max-width: 768px) {
+  .popupCard {
+    width: 92%;
+    max-width: 95%;
+    padding: 20px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 15px;
+  }
+  .popupContent h2 {
+    font-size: 1.8rem;
+    padding-left: 12px;
+  }
+  .popupContent .detailSection {
+    padding: 15px;
+    margin-top: 15px;
+  }
+  .popupContent .detailSection h3 {
+    font-size: 0.8rem;
+  }
+  .popupContent .detailRow {
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-start;
+  }
+  .popupContent .detailRow span {
+    font-size: 1rem;
+  }
+  .fermerPopupBtn {
+    top: 10px;
+    right: 10px;
+    width: 35px;
+    height: 35px;
+  }
+}
+/* ===== RESPONSIVE IMAGE PREVIEW ===== */
+@media (max-width: 1024px) {
+  .imagePreview {
+    display: none !important;
+  }
+}
+@media (max-width: 600px) {
+  table th:nth-child(3), table td:nth-child(3),
+  table th:nth-child(5), table td:nth-child(5),
+  table th:nth-child(6), table td:nth-child(6),
+  table th:nth-child(7), table td:nth-child(7) {
+    display: none;
+  }
 }/*# sourceMappingURL=style.css.map */
