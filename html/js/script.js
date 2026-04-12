@@ -1,399 +1,356 @@
-const MAX_POKEMON_PAGE = 25;
-//nombre maximal de pokemons par page
-let pageActuelle = 1;
-let nombrePages = 1;
-let pokemonsNormaux = [];
-let pokemonsFiltres = [];
-let typesNormauxParId = {};
-let mouvementsNormauxParId = {};
+// Classe responsable de l'affichage et de la gestion des Pokémons
+class PokemonManager {
+    static MAX_POKEMON_PAGE = 25;
 
-// Variables pour les filtres
-let filtreTypeActuel = '';
-let filtreAttaqueActuel = '';
-let filtreNomActuel = '';
-let tousLesTypesDisponibles = new Set();
-let toutesLesAttaquesRapides = new Set();
+    constructor() {
+        this.pageActuelle = 1;
+        this.nombrePages = 1;
+        this.pokemonsNormaux = [];
+        this.pokemonsFiltres = [];
+        this.typesNormauxParId = {};
+        this.mouvementsNormauxParId = {};
 
-//determine la generation a partir de l'id du pokemon
-const obtenirGenerationDepuisId = idPokemon => {
-    if (idPokemon <= 151) return 'Génération I';
-    if (idPokemon <= 251) return 'Génération II';
-    if (idPokemon <= 386) return 'Génération III';
-    if (idPokemon <= 493) return 'Génération IV';
-    if (idPokemon <= 649) return 'Génération V';
-    if (idPokemon <= 721) return 'Génération VI';
-    if (idPokemon <= 809) return 'Génération VII';
-    if (idPokemon <= 898) return 'Génération VIII';
-    return 'Génération IX+';
-};
+        // Filtres actuels
+        this.filtreTypeActuel = '';
+        this.filtreAttaqueActuel = '';
+        this.filtreNomActuel = '';
+        this.tousLesTypesDisponibles = new Set();
+        this.toutesLesAttaquesRapides = new Set();
+    }
 
-//formate la liste de types pour l'affichage
-const formaterTypes = types => types.join(' / ');
+    // Détermine la génération à partir de l'ID du Pokémon
+    static obtenirGeneration(idPokemon) {
+        if (idPokemon <= 151) return 'Génération I';
+        if (idPokemon <= 251) return 'Génération II';
+        if (idPokemon <= 386) return 'Génération III';
+        if (idPokemon <= 493) return 'Génération IV';
+        if (idPokemon <= 649) return 'Génération V';
+        if (idPokemon <= 721) return 'Génération VI';
+        if (idPokemon <= 809) return 'Génération VII';
+        if (idPokemon <= 898) return 'Génération VIII';
+        return 'Génération IX+';
+    }
 
-function initialiserDonnees() {
-    //initialise les tables utilisees pour l'affichage
-    pokemon_types
-        .filter(pokemon => pokemon.form === 'Normal')
-        .forEach(pokemon => {
-            typesNormauxParId[pokemon.pokemon_id] = pokemon.type;
+    // Formate la liste de types pour l'affichage
+    static formaterTypes(types) {
+        return types.join(' / ');
+    }
+
+    // Normalise un texte pour la comparaison (sans casse, sans accents)
+    static normaliserTexte(texte) {
+        return texte
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase();
+    }
+
+    // Initialise les tables utilisées pour l'affichage et les données
+    initialiser() {
+        // Récupère tous les Pokémons normaux et les trie par ID
+        this.pokemonsNormaux = pokemons
+            .filter(pokemon => pokemon.form === 'Normal')
+            .sort((a, b) => a.pokemon_id - b.pokemon_id);
+
+        // Remplit les tables de types et mouvements pour chaque Pokémon
+        this.pokemonsNormaux.forEach(pokemon => {
+            const types = pokemon_types
+                .find(p => p.pokemon_id === pokemon.pokemon_id && p.form === 'Normal');
+            const mouvements = pokemon_moves
+                .find(p => p.pokemon_id === pokemon.pokemon_id && p.form === 'Normal');
+            
+            if (types) this.typesNormauxParId[pokemon.pokemon_id] = types.type;
+            if (mouvements) {
+                this.mouvementsNormauxParId[pokemon.pokemon_id] = {
+                    fast_moves: mouvements.fast_moves,
+                    charged_moves: mouvements.charged_moves,
+                    elite_fast_moves: mouvements.elite_fast_moves,
+                    elite_charged_moves: mouvements.elite_charged_moves
+                };
+            }
         });
 
-    pokemon_moves
-        .filter(pokemon => pokemon.form === 'Normal')
-        .forEach(pokemon => {
-            mouvementsNormauxParId[pokemon.pokemon_id] = {
-                fast_moves: pokemon.fast_moves,
-                charged_moves: pokemon.charged_moves,
-                elite_fast_moves: pokemon.elite_fast_moves,
-                elite_charged_moves: pokemon.elite_charged_moves
-            };
+        // Extrait les types et attaques disponibles
+        this.pokemonsNormaux.forEach(pokemon => {
+            const types = this.typesNormauxParId[pokemon.pokemon_id] || [];
+            types.forEach(type => this.tousLesTypesDisponibles.add(type));
+            
+            const mouvements = this.mouvementsNormauxParId[pokemon.pokemon_id] || {};
+            if (mouvements.fast_moves) {
+                mouvements.fast_moves.forEach(move => this.toutesLesAttaquesRapides.add(move));
+            }
         });
 
-    pokemonsNormaux = pokemons
-        .filter(pokemon => pokemon.form === 'Normal')
-        .sort((a, b) => a.pokemon_id - b.pokemon_id);
+        // Initialise les dropdowns et l'affichage
+        this.peuplerSelectType();
+        this.peuplerSelectAttaque();
+        this.appliquerFiltres();
+        this.lierEvenementsPagination();
+        this.lierEvenementsFermeture();
+        this.lierEvenementsFiltre();
+        this.allerAUnePage(1);
+    }
 
-    // Extraire les types et attaques disponibles
-    pokemonsNormaux.forEach(pokemon => {
-        const types = typesNormauxParId[pokemon.pokemon_id] || [];
-        types.forEach(type => tousLesTypesDisponibles.add(type));
+    // Met à jour les contrôles et l'étiquette de pagination
+    mettreAJourAffichagePagination() {
+        const etiquette = `Page ${this.pageActuelle} / ${this.nombrePages}`;
+
+        $('#infoPage').text(etiquette);
+        $('#precedentHaut').prop('disabled', this.pageActuelle <= 1);
+        $('#suivantHaut').prop('disabled', this.pageActuelle >= this.nombrePages);
+    }
+
+    // Crée une ligne de tableau HTML pour un Pokémon
+    creerLignePokemon(pokemon) {
+        const types = this.typesNormauxParId[pokemon.pokemon_id] || [];
+        const idImage = String(pokemon.pokemon_id).padStart(3, '0');
+        const sourceImage = `webp/images/${idImage}.webp`;
         
-        const mouvements = mouvementsNormauxParId[pokemon.pokemon_id] || {};
-        if (mouvements.fast_moves) {
-            mouvements.fast_moves.forEach(move => toutesLesAttaquesRapides.add(move));
+        const tr = $('<tr>')
+            .data('pokemonId', pokemon.pokemon_id)
+            .html(`
+                <td>${pokemon.pokemon_id}</td>
+                <td>${pokemon.pokemon_name}</td>
+                <td>${PokemonManager.obtenirGeneration(pokemon.pokemon_id)}</td>
+                <td>${PokemonManager.formaterTypes(types)}</td>
+                <td>${pokemon.base_stamina}</td>
+                <td>${pokemon.base_attack}</td>
+                <td>${pokemon.base_defense}</td>
+                <td><img src="${sourceImage}" alt="${pokemon.pokemon_name}" loading="lazy" class="pokemonThumbnail" data-pokemon-id="${pokemon.pokemon_id}" data-pokemon-name="${pokemon.pokemon_name}"></td>
+            `);
+
+        // Événement clic sur la ligne pour ouvrir le popup de détails
+        tr.on('click', () => this.afficherPopupDetails(pokemon));
+
+        // Événements sur la miniature pour l'aperçu
+        const img = tr.find('.pokemonThumbnail');
+        img.on('mouseenter', (e) => this.afficherAperçuImage(e, sourceImage, pokemon.pokemon_name));
+        img.on('mouseleave', () => this.masquerAperçuImage());
+
+        return tr;
+    }
+
+    // Remplit le tbody avec les Pokémons de la page courante (filtrés et paginés)
+    creerTableauPokemons() {
+        const tbody = $('tbody');
+
+        tbody.empty();
+
+        if (this.pokemonsFiltres.length === 0) {
+            tbody.html('<tr><td colspan="8">Aucun Pokémon ne correspond aux filtres.</td></tr>');
+            return;
         }
-    });
 
-    // Initialiser les dropdowns
-    peuplerSelectType();
-    peuplerSelectAttaque();
-    
-    // Initialiser les pokemons filtres avec tous les pokemons
-    appliquerFiltres();
+        const indexDebut = (this.pageActuelle - 1) * PokemonManager.MAX_POKEMON_PAGE;
+        const pokemonsPage = this.pokemonsFiltres.slice(indexDebut, indexDebut + PokemonManager.MAX_POKEMON_PAGE);
 
-    nombrePages = Math.max(1, Math.ceil(pokemonsFiltres.length / MAX_POKEMON_PAGE));
-}
-
-function mettreAJourAffichagePagination() {
-    //met a jour les controles et l'etiquette de pagination
-    const infoPage = document.getElementById('infoPage');
-    const precedent = document.getElementById('precedentHaut');
-    const suivant = document.getElementById('suivantHaut');
-    const etiquette = `Page ${pageActuelle} / ${nombrePages}`;
-
-    if (infoPage) infoPage.textContent = etiquette;
-    if (precedent) precedent.disabled = pageActuelle <= 1;
-    if (suivant) suivant.disabled = pageActuelle >= nombrePages;
-}
-
-function creerLignePokemon(pokemon) {
-    //cree une ligne de tableau HTML pour un pokemon
-    const types = typesNormauxParId[pokemon.pokemon_id] || [];
-    const idImage = String(pokemon.pokemon_id).padStart(3, '0');
-    const sourceImage = `webp/images/${idImage}.webp`;
-    const tr = document.createElement('tr');
-    
-    tr.dataset.pokemonId = pokemon.pokemon_id;
-
-    tr.innerHTML = `
-        <td>${pokemon.pokemon_id}</td>
-        <td>${pokemon.pokemon_name}</td>
-        <td>${obtenirGenerationDepuisId(pokemon.pokemon_id)}</td>
-        <td>${formaterTypes(types)}</td>
-        <td>${pokemon.base_stamina}</td>
-        <td>${pokemon.base_attack}</td>
-        <td>${pokemon.base_defense}</td>
-        <td><img src="${sourceImage}" alt="${pokemon.pokemon_name}" loading="lazy" class="pokemonThumbnail" data-pokemon-id="${pokemon.pokemon_id}" data-pokemon-name="${pokemon.pokemon_name}"></td>
-    `;
-
-    // Événement clic sur la ligne pour ouvrir le popup de détails
-    tr.addEventListener('click', () => afficherPopupDetails(pokemon));
-
-    // Événements sur la miniature pour l'aperçu
-    const img = tr.querySelector('.pokemonThumbnail');
-    img.addEventListener('mouseenter', (e) => afficherAperçuImage(e, sourceImage, pokemon.pokemon_name));
-    img.addEventListener('mouseleave', () => masquerAperçuImage());
-
-    return tr;
-}
-
-function creerTableauPokemons() {
-    //remplit le tbody avec les pokemons de la page courante (filtres et pagines)
-    const tbody = document.querySelector('tbody');
-    if (!tbody) return;
-
-    tbody.innerHTML = '';
-
-    if (pokemonsFiltres.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8">Aucun Pokémon ne correspond aux filtres.</td></tr>';
-        return;
+        pokemonsPage.forEach(pokemon => tbody.append(this.creerLignePokemon(pokemon)));
     }
 
-    const indexDebut = (pageActuelle - 1) * MAX_POKEMON_PAGE;
-    const pokemonsPage = pokemonsFiltres.slice(indexDebut, indexDebut + MAX_POKEMON_PAGE);
+    // Change la page courante et met à jour l'affichage
+    allerAUnePage(numeroPage) {
+        this.pageActuelle = Math.min(Math.max(numeroPage, 1), this.nombrePages);
+        this.creerTableauPokemons();
+        this.mettreAJourAffichagePagination();
+    }
 
-    pokemonsPage.forEach(pokemon => tbody.appendChild(creerLignePokemon(pokemon)));
-}
+    // Associe les boutons précédent/suivant aux actions de pagination
+    lierEvenementsPagination() {
+        $('#precedentHaut').on('click', () => this.allerAUnePage(this.pageActuelle - 1));
+        $('#suivantHaut').on('click', () => this.allerAUnePage(this.pageActuelle + 1));
+    }
 
-function allerAUnePage(numeroPage) {
-    //change la page courante et met a jour l'affichage
-    pageActuelle = Math.min(Math.max(numeroPage, 1), nombrePages);
-    creerTableauPokemons();
-    mettreAJourAffichagePagination();
-}
+    // Construit et affiche le contenu du popup de détails
+    afficherPopupDetails(pokemon) {
+        const types = this.typesNormauxParId[pokemon.pokemon_id] || [];
+        const mouvements = this.mouvementsNormauxParId[pokemon.pokemon_id] || {};
+        
+        let contenuMovements = '';
+        
+        if (mouvements.fast_moves && mouvements.fast_moves.length > 0) {
+            contenuMovements += `
+                <div class="detailSection">
+                    <h3>Attaques rapides</h3>
+                    <div class="movesList">
+                        ${mouvements.fast_moves.map(move => `<span class="moveBadge">${move}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+        }
+        
+        if (mouvements.charged_moves && mouvements.charged_moves.length > 0) {
+            contenuMovements += `
+                <div class="detailSection">
+                    <h3>Attaques chargées</h3>
+                    <div class="movesList">
+                        ${mouvements.charged_moves.map(move => `<span class="moveBadge">${move}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+        }
 
-function lierEvenementsPagination() {
-    //associe les boutons precedent/suivant aux actions de pagination
-    const precedent = document.getElementById('precedentHaut');
-    const suivant = document.getElementById('suivantHaut');
-
-    if (precedent) precedent.addEventListener('click', () => allerAUnePage(pageActuelle - 1));
-    if (suivant) suivant.addEventListener('click', () => allerAUnePage(pageActuelle + 1));
-}
-
-function afficherPopupDetails(pokemon) {
-    //construit et affiche le contenu du popup de details
-    const types = typesNormauxParId[pokemon.pokemon_id] || [];
-    const mouvements = mouvementsNormauxParId[pokemon.pokemon_id] || {};
-    
-    let contenuMovements = '';
-    
-    if (mouvements.fast_moves && mouvements.fast_moves.length > 0) {
-        contenuMovements += `
+        const htmlPopup = `
+            <h2>${pokemon.pokemon_name}</h2>
             <div class="detailSection">
-                <h3>Attaques rapides</h3>
-                <div class="movesList">
-                    ${mouvements.fast_moves.map(move => `<span class="moveBadge">${move}</span>`).join('')}
+                <div class="detailRow">
+                    <strong>ID:</strong>
+                    <span>${pokemon.pokemon_id}</span>
+                </div>
+                <div class="detailRow">
+                    <strong>Génération:</strong>
+                    <span>${PokemonManager.obtenirGeneration(pokemon.pokemon_id)}</span>
+                </div>
+                <div class="detailRow">
+                    <strong>Types:</strong>
+                    <span>${PokemonManager.formaterTypes(types)}</span>
                 </div>
             </div>
-        `;
-    }
-    
-    if (mouvements.charged_moves && mouvements.charged_moves.length > 0) {
-        contenuMovements += `
             <div class="detailSection">
-                <h3>Attaques chargées</h3>
-                <div class="movesList">
-                    ${mouvements.charged_moves.map(move => `<span class="moveBadge">${move}</span>`).join('')}
+                <div class="detailRow">
+                    <strong>Endurance:</strong>
+                    <span>${pokemon.base_stamina}</span>
+                </div>
+                <div class="detailRow">
+                    <strong>Attaque de base:</strong>
+                    <span>${pokemon.base_attack}</span>
+                </div>
+                <div class="detailRow">
+                    <strong>Défense de base:</strong>
+                    <span>${pokemon.base_defense}</span>
                 </div>
             </div>
+            ${contenuMovements}
         `;
+
+        $('#popupContent').html(htmlPopup);
+        $('#pokemonDetailsPopup').show();
     }
 
-    const htmlPopup = `
-        <h2>${pokemon.pokemon_name}</h2>
-        <div class="detailSection">
-            <div class="detailRow">
-                <strong>ID:</strong>
-                <span>${pokemon.pokemon_id}</span>
-            </div>
-            <div class="detailRow">
-                <strong>Génération:</strong>
-                <span>${obtenirGenerationDepuisId(pokemon.pokemon_id)}</span>
-            </div>
-            <div class="detailRow">
-                <strong>Types:</strong>
-                <span>${formaterTypes(types)}</span>
-            </div>
-        </div>
-        <div class="detailSection">
-            <div class="detailRow">
-                <strong>Endurance:</strong>
-                <span>${pokemon.base_stamina}</span>
-            </div>
-            <div class="detailRow">
-                <strong>Attaque de base:</strong>
-                <span>${pokemon.base_attack}</span>
-            </div>
-            <div class="detailRow">
-                <strong>Défense de base:</strong>
-                <span>${pokemon.base_defense}</span>
-            </div>
-        </div>
-        ${contenuMovements}
-    `;
-
-    const popupContent = document.getElementById('popupContent');
-    if (popupContent) {
-        popupContent.innerHTML = htmlPopup;
+    // Cache le popup de détails
+    masquerPopupDetails() {
+        $('#pokemonDetailsPopup').hide();
     }
 
-    const popup = document.getElementById('pokemonDetailsPopup');
-    if (popup) {
-        popup.style.display = 'flex';
-    }
-}
-
-function masquerPopupDetails() {
-    //cache le popup de details
-    const popup = document.getElementById('pokemonDetailsPopup');
-    if (popup) {
-        popup.style.display = 'none';
-    }
-}
-
-function afficherAperçuImage(event, sourceImage, nomPokemon) {
-    //affiche un apercu d'image a cote de la miniature
-    const preview = document.getElementById('imagePreviewPopup');
-    const previewImg = document.getElementById('imagePreviewImg');
-    
-    if (!preview || !previewImg) return;
-    
-    previewImg.src = sourceImage;
-    previewImg.alt = nomPokemon;
-    
-    const rect = event.target.getBoundingClientRect();
-    preview.style.left = (rect.right + 10) + 'px';
-    preview.style.top = (rect.top - 50) + 'px';
-    preview.style.display = 'block';
-}
-
-function masquerAperçuImage() {
-    //cache l'aperçu d'image
-    const preview = document.getElementById('imagePreviewPopup');
-    if (preview) {
-        preview.style.display = 'none';
-    }
-}
-
-function lierEvenementsFermeture() {
-    //lie les evenements pour fermer le popup (bouton, click en dehors, echap)
-    const fermerBtn = document.getElementById('fermerPopup');
-    const popup = document.getElementById('pokemonDetailsPopup');
-
-    if (fermerBtn) {
-        fermerBtn.addEventListener('click', masquerPopupDetails);
+    // Affiche un aperçu d'image à côté de la miniature
+    afficherAperçuImage(event, sourceImage, nomPokemon) {
+        const preview = $('#imagePreviewPopup');
+        const previewImg = $('#imagePreviewImg');
+        
+        if (preview.length === 0 || previewImg.length === 0) return;
+        
+        previewImg.attr('src', sourceImage).attr('alt', nomPokemon);
+        
+        const rect = event.target.getBoundingClientRect();
+        preview
+            .css('left', (rect.right + 10) + 'px')
+            .css('top', (rect.top - 50) + 'px')
+            .show();
     }
 
-    if (popup) {
-        popup.addEventListener('click', (e) => {
-            if (e.target === popup) {
-                masquerPopupDetails();
+    // Cache l'aperçu d'image
+    masquerAperçuImage() {
+        $('#imagePreviewPopup').hide();
+    }
+
+    // Lie les événements pour fermer le popup (bouton, clic en dehors, Échap)
+    lierEvenementsFermeture() {
+        $('#fermerPopup').on('click', () => this.masquerPopupDetails());
+
+        $('#pokemonDetailsPopup').on('click', (e) => {
+            if (e.target === e.currentTarget) {
+                this.masquerPopupDetails();
+            }
+        });
+
+        $(document).on('keydown', (e) => {
+            if (e.key === 'Escape' && $('#pokemonDetailsPopup').is(':visible')) {
+                this.masquerPopupDetails();
             }
         });
     }
 
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && popup && popup.style.display !== 'none') {
-            masquerPopupDetails();
-        }
-    });
-}
-
-// Fonction utilitaire pour normaliser le texte (sans accents, minuscules)
-function normaliserTexte(texte) {
-    //normalise un texte pour la comparaison (pas de casse, pas d'accents)
-    return texte
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .toLowerCase();
-}
-
-// Peupler le select des types
-function peuplerSelectType() {
-    //remplit le select des types avec les types disponibles
-    const selectType = document.getElementById('filtreType');
-    if (!selectType) return;
-    
-    const types = Array.from(tousLesTypesDisponibles).sort();
-    
-    types.forEach(type => {
-        const option = document.createElement('option');
-        option.value = type;
-        option.textContent = type;
-        selectType.appendChild(option);
-    });
-}
-
-// Peupler le select des attaques
-function peuplerSelectAttaque() {
-    //remplit le select des attaques rapides avec les attaques disponibles
-    const selectAttaque = document.getElementById('filtreAttaque');
-    if (!selectAttaque) return;
-    
-    const attaques = Array.from(toutesLesAttaquesRapides).sort();
-    
-    attaques.forEach(attaque => {
-        const option = document.createElement('option');
-        option.value = attaque;
-        option.textContent = attaque;
-        selectAttaque.appendChild(option);
-    });
-}
-
-// Appliquer les filtres et mettre à jour pokemonsFiltres
-function appliquerFiltres() {
-    //applique les filtres selectionnes et met a jour la liste des pokemons affiches
-    pokemonsFiltres = pokemonsNormaux.filter(pokemon => {
-        const types = typesNormauxParId[pokemon.pokemon_id] || [];
-        const mouvements = mouvementsNormauxParId[pokemon.pokemon_id] || {};
-        const attaquesRapides = mouvements.fast_moves || [];
+    // Remplit le select des types avec les types disponibles
+    peuplerSelectType() {
+        const selectType = $('#filtreType');
+        if (selectType.length === 0) return;
         
-        // Filtre Type
-        if (filtreTypeActuel !== '' && !types.includes(filtreTypeActuel)) {
-            return false;
-        }
+        const types = Array.from(this.tousLesTypesDisponibles).sort();
         
-        // Filtre Attaques rapides
-        if (filtreAttaqueActuel !== '' && !attaquesRapides.includes(filtreAttaqueActuel)) {
-            return false;
-        }
+        types.forEach(type => {
+            selectType.append($('<option>').val(type).text(type));
+        });
+    }
+
+    // Remplit le select des attaques rapides avec les attaques disponibles
+    peuplerSelectAttaque() {
+        const selectAttaque = $('#filtreAttaque');
+        if (selectAttaque.length === 0) return;
         
-        // Filtre Nom (sans accents, sans casse)
-        if (filtreNomActuel !== '') {
-            const nomNormalise = normaliserTexte(pokemon.pokemon_name);
-            const rechercheNormalisee = normaliserTexte(filtreNomActuel);
-            if (!nomNormalise.includes(rechercheNormalisee)) {
+        const attaques = Array.from(this.toutesLesAttaquesRapides).sort();
+        
+        attaques.forEach(attaque => {
+            selectAttaque.append($('<option>').val(attaque).text(attaque));
+        });
+    }
+
+    // Applique les filtres sélectionnés et met à jour la liste des Pokémons affichés
+    appliquerFiltres() {
+        this.pokemonsFiltres = this.pokemonsNormaux.filter(pokemon => {
+            const types = this.typesNormauxParId[pokemon.pokemon_id] || [];
+            const mouvements = this.mouvementsNormauxParId[pokemon.pokemon_id] || {};
+            const attaquesRapides = mouvements.fast_moves || [];
+            
+            // Filtre Type
+            if (this.filtreTypeActuel !== '' && !types.includes(this.filtreTypeActuel)) {
                 return false;
             }
-        }
+            
+            // Filtre Attaques rapides
+            if (this.filtreAttaqueActuel !== '' && !attaquesRapides.includes(this.filtreAttaqueActuel)) {
+                return false;
+            }
+            
+            // Filtre Nom (sans accents, sans casse)
+            if (this.filtreNomActuel !== '') {
+                const nomNormalise = PokemonManager.normaliserTexte(pokemon.pokemon_name);
+                const rechercheNormalisee = PokemonManager.normaliserTexte(this.filtreNomActuel);
+                if (!nomNormalise.includes(rechercheNormalisee)) {
+                    return false;
+                }
+            }
+            
+            return true;
+        });
         
-        return true;
-    });
-    
-    // Réinitialiser la pagination à la page 1
-    pageActuelle = 1;
-    nombrePages = Math.max(1, Math.ceil(pokemonsFiltres.length / MAX_POKEMON_PAGE));
-    
-    // Mettre à jour l'affichage
-    creerTableauPokemons();
-    mettreAJourAffichagePagination();
-}
+        // Réinitialise la pagination à la page 1
+        this.pageActuelle = 1;
+        this.nombrePages = Math.max(1, Math.ceil(this.pokemonsFiltres.length / PokemonManager.MAX_POKEMON_PAGE));
+        
+        // Met à jour l'affichage
+        this.creerTableauPokemons();
+        this.mettreAJourAffichagePagination();
+    }
 
-// Lier les événements des filtres
-function lierEvenementsFiltre() {
-    //lie les evenements pour les controles de filtrage
-    const selectType = document.getElementById('filtreType');
-    const selectAttaque = document.getElementById('filtreAttaque');
-    const inputNom = document.getElementById('filtreNom');
-    
-    if (selectType) {
-        selectType.addEventListener('change', (e) => {
-            filtreTypeActuel = e.target.value;
-            appliquerFiltres();
+    // Lie les événements pour les contrôles de filtrage
+    lierEvenementsFiltre() {
+        $('#filtreType').on('change', (e) => {
+            this.filtreTypeActuel = $(e.target).val();
+            this.appliquerFiltres();
         });
-    }
-    
-    if (selectAttaque) {
-        selectAttaque.addEventListener('change', (e) => {
-            filtreAttaqueActuel = e.target.value;
-            appliquerFiltres();
+        
+        $('#filtreAttaque').on('change', (e) => {
+            this.filtreAttaqueActuel = $(e.target).val();
+            this.appliquerFiltres();
         });
-    }
-    
-    if (inputNom) {
-        inputNom.addEventListener('input', (e) => {
-            filtreNomActuel = e.target.value;
-            appliquerFiltres();
+        
+        $('#filtreNom').on('input', (e) => {
+            this.filtreNomActuel = $(e.target).val();
+            this.appliquerFiltres();
         });
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    //initialise l'app une fois le DOM charge
-    initialiserDonnees();
-    lierEvenementsPagination();
-    lierEvenementsFermeture();
-    lierEvenementsFiltre();
-    allerAUnePage(1);
+// Initialise l'application une fois le DOM chargé
+$(document).ready(function() {
+    const manager = new PokemonManager();
+    manager.initialiser();
 });
