@@ -279,6 +279,72 @@ table tbody tr:hover img.pokemonThumbnail {
   padding: 15px;
 }
 
+/* ===== ZONE DE FILTRAGE ===== */
+.filtreContainer {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+  border: 1px solid white;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-end;
+  margin-bottom: 10px;
+}
+.filtreContainer .filtreGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 200px;
+}
+.filtreContainer .filtreGroup label {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #3761a8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.filtreContainer .filtreGroup select, .filtreContainer .filtreGroup input[type=text] {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  background-color: #f8fafc;
+  color: #263238;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  font-size: 1rem;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+}
+.filtreContainer .filtreGroup select:focus, .filtreContainer .filtreGroup input[type=text]:focus {
+  border-color: #3761a8;
+  background-color: white;
+  box-shadow: 0 0 0 4px rgba(55, 97, 168, 0.1);
+}
+.filtreContainer .filtreGroup input[type=text]::-moz-placeholder {
+  color: #94a3b8;
+  font-style: italic;
+}
+.filtreContainer .filtreGroup input[type=text]::placeholder {
+  color: #94a3b8;
+  font-style: italic;
+}
+
+/* ===== RESPONSIVE FILTRES ===== */
+@media (max-width: 768px) {
+  .filtreContainer {
+    padding: 20px;
+    gap: 15px;
+    flex-direction: column;
+  }
+  .filtreContainer .filtreGroup {
+    width: 100%;
+    min-width: 100%;
+  }
+}
 /* ===== ANIMATIONS ===== */
 @keyframes slideIn {
   from {

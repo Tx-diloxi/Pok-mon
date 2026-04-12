@@ -265,6 +265,76 @@ table {
   }
 }
 
+/* ===== ZONE DE FILTRAGE ===== */
+.filtreContainer {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  padding: 25px;
+  border-radius: $rayon-cadre;
+  box-shadow: $ombre-portee;
+  border: 1px solid white;
+  display: flex;
+  flex-wrap: wrap; // Permet de passer à la ligne sur mobile
+  gap: 20px;
+  align-items: flex-end; // Aligne les labels et les champs en bas
+  margin-bottom: 10px;
+
+  .filtreGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1; // Les champs grandissent pour remplir l'espace
+    min-width: 200px; // Évite que les champs soient trop étroits
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: $couleur-pokedex-bleu;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    select, input[type="text"] {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: $rayon-bouton;
+      border: 2px solid #e2e8f0;
+      background-color: #f8fafc;
+      color: $couleur-texte-principal;
+      font-family: $police-principale;
+      font-size: 1rem;
+      transition: all 0.2s ease-in-out;
+      outline: none;
+
+      &:focus {
+        border-color: $couleur-pokedex-bleu;
+        background-color: white;
+        box-shadow: 0 0 0 4px rgba($couleur-pokedex-bleu, 0.1);
+      }
+    }
+
+    // Style spécifique pour l'input de recherche par nom
+    input[type="text"]::placeholder {
+      color: #94a3b8;
+      font-style: italic;
+    }
+  }
+}
+
+/* ===== RESPONSIVE FILTRES ===== */
+@media (max-width: 768px) {
+  .filtreContainer {
+    padding: 20px;
+    gap: 15px;
+    flex-direction: column; // Empilement vertical sur mobile
+
+    .filtreGroup {
+      width: 100%;
+      min-width: 100%;
+    }
+  }
+}
+
 /* ===== ANIMATIONS ===== */
 @keyframes slideIn {
   from { opacity: 0; transform: translateY(50px) scale(0.9); }
