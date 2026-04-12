@@ -241,7 +241,7 @@ class PokemonManager {
         
         const rect = event.target.getBoundingClientRect();
         preview
-            .css('left', (rect.right + 10) + 'px')
+            .css('left', (rect.right - 300) + 'px')
             .css('top', (rect.top - 50) + 'px')
             .show();
     }
