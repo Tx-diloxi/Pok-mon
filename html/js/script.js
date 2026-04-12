@@ -8,16 +8,19 @@ class PokemonPartie2 {
         this.nombrePages = 1; //par défaut 1 page, calculé 
         this.pokemonsNormaux = []; //tous les pokemons de forme normale
         this.pokemonsFiltres = []; //pokemons après application des filtres
-        this.typesNormauxParId = {};
-        this.mouvementsNormauxParId = {};
+        this.typesNormauxParId = {}; //liste des types de chaque pokemon par son id pour un accès rapide
+        this.mouvementsNormauxParId = {}; //liste des mouvements de chaque pokemon par son id pour un accès rapide
 
         //filtres actuels
         this.filtreTypeActuel = '';
         this.filtreAttaqueActuel = '';
         this.filtreNomActuel = '';
-        this.tousLesTypesDisponibles = [];
-        this.toutesLesAttaquesRapides = [];
 
+        //select
+        this.tousLesTypesDisponibles = []; //tableau de tous les types disponibles parmi les pokemons normaux pour les select
+        this.toutesLesAttaquesRapides = []; //tableau de toutes les attaques rapides disponibles parmi les pokemons normaux pour les select
+
+        //object pour stocker l'état actuel du tri (colonne et direction)
         this.triActuel = {
             colonne: null, // ID de la colonne (ex: 'idPokemon', 'nom')
             direction: 1   // 1 pour croissant, -1 pour décroissant
@@ -53,25 +56,33 @@ class PokemonPartie2 {
 
     //initialise les tableaux pour l'affichage et les données
     initialiser() {
-        this.pokemonsNormaux = Object.values(Pokemon.all_pokemons)
-            .sort((a, b) => a.idPokemon - b.idPokemon);
+        //recup et remplit pokemonsNormaux avec tous les pokemons de la classe Pokemon (partie 1)
+        this.pokemonsNormaux = Object.values(Pokemon.all_pokemons);
 
+        //remplit pokemonsFiltres avec tous les pokemons au départ (avant application des filtres)
         this.pokemonsNormaux.forEach(pokemon => {
+            //recup les types  avec getTypes() de la classe Pokemon (partie 1) 
             const types = pokemon.getTypes().map(type => type.nom);
+
+            //recup les mouvements rapides et chargés du pokemon dans la classe Pokemon (partie 1)
             const mouvements = {
                 fast_moves: Array.isArray(pokemon.nomAttaqueRapides) ? pokemon.nomAttaqueRapides : [],
                 charged_moves: Array.isArray(pokemon.nomAttaqueChargees) ? pokemon.nomAttaqueChargees : []
             };
 
+            //stocke typesNormauxParId dans type pour un accès rapide par id de pokemon
             this.typesNormauxParId[pokemon.idPokemon] = types;
+            //stocke mouvementsNormauxParId dans mouvement pour un accès rapide par id de pokemon
             this.mouvementsNormauxParId[pokemon.idPokemon] = mouvements;
 
+            //ajoute les types du pokemon à la liste de tous les types disponibles s'ils n'y sont pas déjà
             types.forEach(type => {
                 if (!this.tousLesTypesDisponibles.includes(type)) {
                     this.tousLesTypesDisponibles.push(type);
                 }
             });
 
+            //ajoute les attaques rapides du pokemon à la liste de toutes les attaques rapides disponibles s'ils n'y sont pas déjà
             mouvements.fast_moves.forEach(move => {
                 if (!this.toutesLesAttaquesRapides.includes(move)) {
                     this.toutesLesAttaquesRapides.push(move);
@@ -79,13 +90,18 @@ class PokemonPartie2 {
             });
         });
 
+        //peuple le select des types avec les types disponibles
         this.peuplerSelectType();
+        //peuple le select des attaques rapides avec les attaques disponibles
         this.peuplerSelectAttaque();
+
+        //lie tous les événements utilisateur
         this.lierEvenementsPagination();
         this.lierEvenementsFermeture();
         this.lierEvenementsFiltre();
         this.lierEvenementsTri();
 
+        //applique les filtres initiaux et affiche la première page
         this.appliquerFiltres();
         this.allerAUnePage(1);
     }
@@ -181,8 +197,11 @@ class PokemonPartie2 {
 
     //construit une ligne de tableau pour un pokemon donné
     creerLignePokemon(pokemon) {
+        //recup les types associés au pokemon
         const types = this.typesNormauxParId[pokemon.idPokemon];
+        //formate l'id du pokemon avec des zéros à gauche pour correspondre au format des images (ex: 001, 025, etc)
         const idImage = String(pokemon.idPokemon).padStart(3, '0');
+        //construis le chemin vers l'image webp du pokemon
         const sourceImage = `webp/images/${idImage}.webp`;
         const tr = $('<tr>')
             .data('pokemonId', pokemon.idPokemon)
@@ -222,7 +241,7 @@ class PokemonPartie2 {
             return;
         }
 
-        //calcule indexDebut pour la page actuelle et récupère les pokemons à afficher
+        //calcule indexDebut pour la page actuelle et recup les pokemons à afficher
         const indexDebut = (this.pageActuelle - 1) * PokemonPartie2.MAX_POKEMON_PAR_PAGE;
         //affiche les 25 pokemons de la page actuelle à partir de indexDebut
         const pokemonsPage = this.pokemonsFiltres.slice(indexDebut, indexDebut + PokemonPartie2.MAX_POKEMON_PAR_PAGE);
@@ -240,20 +259,26 @@ class PokemonPartie2 {
 
     //lie les événements des boutons suiv/prec pour changer de page
     lierEvenementsPagination() {
+        //quand clique sur précédent, décrémente le numéro de page
         $('#precedentHaut').on('click', () => this.allerAUnePage(this.pageActuelle - 1));
+        //quand clique sur suivant, incrémente le numéro de page
         $('#suivantHaut').on('click', () => this.allerAUnePage(this.pageActuelle + 1));
     }
 
     //construit et affiche le popup de détails pour un pokemon donné
     afficherPopupDetails(pokemon) {
+        //recup les types du pokemon depuis la classe Pokemon (partie 1)
         const types = pokemon.getTypes().map(type => type.nom);
+        //structure les mouvements rapides et chargés du pokemon
         const mouvements = {
             fast_moves: Array.isArray(pokemon.nomAttaqueRapides) ? pokemon.nomAttaqueRapides : [],
             charged_moves: Array.isArray(pokemon.nomAttaqueChargees) ? pokemon.nomAttaqueChargees : []
         };
 
+        //initialise la chaîne de caractères pour les mouvements
         let contenuMouvements = '';
         
+        //si le pokemon a des attaques rapides, on les ajoute au contenu
         if (mouvements.fast_moves.length > 0) {
             contenuMouvements += `
                 <div class="detailSection">
@@ -265,6 +290,7 @@ class PokemonPartie2 {
             `;
         }
         
+        //si le pokemon a des attaques chargées, on les ajoute au contenu
         if (mouvements.charged_moves.length > 0) {
             contenuMouvements += `
                 <div class="detailSection">
@@ -276,6 +302,7 @@ class PokemonPartie2 {
             `;
         }
 
+        //construit l'HTML de la popup avec toutes les informations du pokemon et ses mouvements
         const htmlPopup = `
             <h2>${pokemon.nom}</h2>
             <div class="detailSection">
@@ -309,18 +336,19 @@ class PokemonPartie2 {
             ${contenuMouvements}
         `;
         
-        //affiche le contenu dans le popup
+        //remplis le contenu du popup avec le HTML généré contenant tous les détails
         $('#contenuPopup').html(htmlPopup);
-        //affiche le popup
+        //rend le popup visible pour afficher les détails au utilisateur
         $('#pokemonDetailsPopup').show();
     }
 
-    //cache la popup
+    //cache le popup de détails en le masquant
     masquerPopupDetails() {
+        //masque le popup
         $('#pokemonDetailsPopup').hide();
     }
 
-    //affiche l'aperçu d'image à côté de la miniature
+    //affiche l'aperçu d'image à côté de la miniature lors du survol
     afficherAperçuImage(event, sourceImage, nomPokemon) {
         //recup le conteneur de l'aperçu
         const apercu = $('#popupApercuImage');
@@ -332,20 +360,21 @@ class PokemonPartie2 {
             return;
         }
 
-        //maj source et alt de l'image de l'aperçu
+        //maj source et alt de l'image de l'aperçu avec l'image du pokemon
         imageApercu.attr('src', sourceImage).attr('alt', nomPokemon);
         
         //recup les coordonnées de la miniature pour positionner l'aperçu à côté
         const rect = event.target.getBoundingClientRect();
-        //positionne l'apercu à côté de la miniature
+        //positionne l'apercu à côté de la miniature en décalant de 300px à droite et 50px vers le haut
         apercu
             .css('left', (rect.right - 300) + 'px')
             .css('top', (rect.top - 50) + 'px')
             .show();
     }
 
-    //cache l'aperçu d'image
+    //cache l'aperçu d'image en le masquant
     masquerAperçuImage() {
+        //masque l'aperçu d'image
         $('#popupApercuImage').hide();
     }
 
@@ -354,8 +383,9 @@ class PokemonPartie2 {
         //si clique sur le bouton de fermeture, masque le popup
         $('#fermerPopup').on('click', () => this.masquerPopupDetails());
 
-        //si clique en dehors du contenu du popup, masque le popup
+        //si clique en dehors du contenu du popup (sur le fond semi-transparent), masque le popup
         $('#pokemonDetailsPopup').on('click', (e) => {
+            //vérifie si on a cliqué sur l'overlay et non sur le contenu du popup
             if (e.target == e.currentTarget) {
                 this.masquerPopupDetails();
             }
@@ -363,6 +393,7 @@ class PokemonPartie2 {
 
         //si appuie sur la touche Echap et que le popup est visible, masque le popup
         $(document).on('keydown', (e) => {
+            //vérifie que c'est bien la touche Echap et que le popup est actuellement visible
             if (e.key == 'Escape' && $('#pokemonDetailsPopup').is(':visible')) {
                 this.masquerPopupDetails();
             }
@@ -371,11 +402,15 @@ class PokemonPartie2 {
 
     //peuple le select des types avec les types disponibles
     peuplerSelectType() {
+        //recup l'élément select des types
         const selectType = $('#filtreType');
+        //si l'élément n'existe pas, ne rien faire
         if (selectType.length == 0) return;
         
+        //recup une copie des types disponibles et les trie alphabétiquement
         const types = this.tousLesTypesDisponibles.slice().sort();
         
+        //pour chaque type, crée une option et l'ajoute au select
         types.forEach(type => {
             selectType.append($('<option>').val(type).text(type));
         });
@@ -383,11 +418,15 @@ class PokemonPartie2 {
 
     //peuple le select des attaques rapides avec les attaques disponibles
     peuplerSelectAttaque() {
+        //recup l'élément select des attaques
         const selectAttaque = $('#filtreAttaque');
+        //si l'élément n'existe pas, ne rien faire
         if (selectAttaque.length == 0) return;
         
+        //recup une copie des attaques disponibles et les trie alphabétiquement
         const attaques = this.toutesLesAttaquesRapides.slice().sort();
         
+        //pour chaque attaque, crée une option et l'ajoute au select
         attaques.forEach(attaque => {
             selectAttaque.append($('<option>').val(attaque).text(attaque));
         });
@@ -395,20 +434,26 @@ class PokemonPartie2 {
 
     //applique les filtres sélectionnés et maj la liste des Pokémons affichés
     appliquerFiltres() {
+        //filtre les pokemons en fonction des critères actuels
         this.pokemonsFiltres = this.pokemonsNormaux.filter(pokemon => {
+            //recup les types et mouvements du pokemon
             const types = this.typesNormauxParId[pokemon.idPokemon] || [];
             const mouvements = this.mouvementsNormauxParId[pokemon.idPokemon] || { fast_moves: [], charged_moves: [] };
             const attaquesRapides = mouvements.fast_moves || [];
             
+            //si un filtre de type est sélectionné et que le pokemon ne le possède pas, on l'exclut
             if (this.filtreTypeActuel !== '' && !types.includes(this.filtreTypeActuel)) {
                 return false;
             }
             
+            //si un filtre d'attaque est sélectionnée et que le pokemon ne la possède pas, on l'exclut
             if (this.filtreAttaqueActuel !== '' && !attaquesRapides.includes(this.filtreAttaqueActuel)) {
                 return false;
             }
             
+            //si un filtre de nom est entré et que le pokemon ne le contient pas, on l'exclut
             if (this.filtreNomActuel !== '') {
+                //normalise le nom du pokemon et la recherche pour une comparaison sans accents et en minuscules
                 const nomNormalise = PokemonPartie2.normaliserTexte(pokemon.nom);
                 const rechercheNormalisee = PokemonPartie2.normaliserTexte(this.filtreNomActuel);
                 if (!nomNormalise.includes(rechercheNormalisee)) {
@@ -416,15 +461,16 @@ class PokemonPartie2 {
                 }
             }
             
+            //le pokemon passe tous les filtres
             return true;
         });
         
-        //fix le numéro de page à 1
+        //réinitialise le numéro de page à 1 puisqu'on vient de changer les filtres
         this.pageActuelle = 1;
-        //calcule le nombre de pages en fonction du nombre de pokemons après filtrage
+        //calcule le nombre total de pages après l'application des filtres
         this.nombrePages = Math.max(1, Math.ceil(this.pokemonsFiltres.length / PokemonPartie2.MAX_POKEMON_PAR_PAGE));
         
-        //maj l'affichage
+        //met à jour les affichages du tableau et de la pagination
         this.creerTableauPokemons();
         this.mettreAJourAffichagePagination();
     }
@@ -433,19 +479,25 @@ class PokemonPartie2 {
     lierEvenementsFiltre() {
         //quand le filtre de type change, on met à jour le filtre actuel et on applique les filtres
         $('#filtreType').on('change', (e) => {
+            //recup la valeur sélectionnée
             this.filtreTypeActuel = $(e.target).val();
+            //applique les filtres avec la nouvelle valeur
             this.appliquerFiltres();
         });
         
         //quand le filtre d'attaque rapide change, on met à jour le filtre actuel et on applique les filtres
         $('#filtreAttaque').on('change', (e) => {
+            //recup la valeur sélectionnée
             this.filtreAttaqueActuel = $(e.target).val();
+            //applique les filtres avec la nouvelle valeur
             this.appliquerFiltres();
         });
         
-        //quand le filtre de nom change, on met à jour le filtre actuel et on applique les filtres
+        //quand le filtre de nom change (en temps réel), on met à jour le filtre actuel et on applique les filtres
         $('#filtreNom').on('input', (e) => {
+            //recup la valeur entrée par l'utilisateur
             this.filtreNomActuel = $(e.target).val();
+            //applique les filtres avec la nouvelle recherche
             this.appliquerFiltres();
         });
     }
