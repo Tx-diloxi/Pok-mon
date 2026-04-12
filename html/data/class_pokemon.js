@@ -1,12 +1,3 @@
-import Type from "./class_type.js";
-import Attack from "./class_attack.js";
-
-import pokemon_moves from "./pokemon_moves.js";
-import pokemons from "./pokemons.js";
-
-import pokemon_types from "./pokemon_types.js";
-//importe les types et mouvements des pokemons
-
 class Pokemon {
     static all_pokemons = {};
 
@@ -167,4 +158,5 @@ fill_pokemons();
 // console.table(new Pokemon("Bulbasaur").getTypes());
 
 //console.table(new Pokemon("Bulbasaur").getAttacks());
+
 

@@ -153,7 +153,7 @@ table thead th {
   position: relative;
   transition: background-color 0.2s;
 }
-table thead th .tri-arrow {
+table thead th .fleche-tri {
   display: inline-block;
   margin-left: 8px;
   font-size: 0.7rem;
@@ -166,7 +166,7 @@ table thead th:hover {
 }
 
 /* ===== POPUP DE DÉTAILS (INFO CLIQUEE) ===== */
-.popupOverlay {
+.superpositionPopup {
   position: fixed;
   inset: 0;
   background: rgba(13, 26, 38, 0.8);
@@ -177,7 +177,7 @@ table thead th:hover {
   z-index: 1000;
 }
 
-.popupCard {
+.cartePopup {
   background: white;
   border-radius: 28px;
   padding: 40px;
@@ -210,7 +210,7 @@ table thead th:hover {
   transform: rotate(90deg);
 }
 
-.popupContent h2 {
+.contenuPopup h2 {
   color: #3761a8;
   font-size: 2.8rem;
   margin: 0 0 10px 0;
@@ -218,14 +218,14 @@ table thead th:hover {
   border-left: 12px solid #feca1b;
   padding-left: 20px;
 }
-.popupContent .detailSection {
+.contenuPopup .detailSection {
   margin-top: 30px;
   background: #f8fafc;
   border-radius: 16px;
   padding: 25px;
   border: 1px solid #e2e8f0;
 }
-.popupContent .detailSection h3 {
+.contenuPopup .detailSection h3 {
   font-size: 0.95rem;
   color: #ef5350;
   text-transform: uppercase;
@@ -234,41 +234,41 @@ table thead th:hover {
   display: flex;
   align-items: center;
 }
-.popupContent .detailSection h3::after {
+.contenuPopup .detailSection h3::after {
   content: "";
   flex: 1;
   height: 1px;
   background: #cbd5e1;
   margin-left: 15px;
 }
-.popupContent .detailRow {
+.contenuPopup .ligneDetail {
   display: flex;
   justify-content: space-between;
   padding: 14px 0;
   border-bottom: 1px dashed #cbd5e1;
 }
-.popupContent .detailRow:last-child {
+.contenuPopup .ligneDetail:last-child {
   border: none;
 }
-.popupContent .detailRow strong {
+.contenuPopup .ligneDetail strong {
   color: #546e7a;
   font-weight: 600;
   text-transform: uppercase;
   font-size: 0.85rem;
 }
-.popupContent .detailRow span {
+.contenuPopup .ligneDetail span {
   color: #263238;
   font-weight: 800;
   font-size: 1.1rem;
   font-family: "Courier New", monospace;
 }
-.popupContent .movesList {
+.contenuPopup .listeMouvements {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 15px;
 }
-.popupContent .movesList .moveBadge {
+.contenuPopup .listeMouvements .badgeMouvement {
   background: white;
   border: 2px solid #feca1b;
   padding: 8px 16px;
@@ -280,13 +280,13 @@ table thead th:hover {
 }
 
 /* ===== APERÇU IMAGE (HOVER) - ESSENTIEL POUR LE JS ===== */
-.imagePreview {
+.apercuImage {
   position: fixed;
   z-index: 1100;
   pointer-events: none;
   display: none;
 }
-.imagePreview img {
+.apercuImage img {
   max-width: 300px;
   background: white;
   border: 10px solid #feca1b;
@@ -388,7 +388,7 @@ table thead th:hover {
 }
 /* ===== RESPONSIVE POPUP ===== */
 @media (max-width: 768px) {
-  .popupCard {
+  .cartePopup {
     width: 92%;
     max-width: 95%;
     padding: 20px;
@@ -396,23 +396,23 @@ table thead th:hover {
     overflow-y: auto;
     border-radius: 15px;
   }
-  .popupContent h2 {
+  .contenuPopup h2 {
     font-size: 1.8rem;
     padding-left: 12px;
   }
-  .popupContent .detailSection {
+  .contenuPopup .detailSection {
     padding: 15px;
     margin-top: 15px;
   }
-  .popupContent .detailSection h3 {
+  .contenuPopup .detailSection h3 {
     font-size: 0.8rem;
   }
-  .popupContent .detailRow {
+  .contenuPopup .ligneDetail {
     flex-direction: column;
     gap: 5px;
     align-items: flex-start;
   }
-  .popupContent .detailRow span {
+  .contenuPopup .ligneDetail span {
     font-size: 1rem;
   }
   .fermerPopupBtn {
@@ -424,7 +424,7 @@ table thead th:hover {
 }
 /* ===== RESPONSIVE IMAGE PREVIEW ===== */
 @media (max-width: 1024px) {
-  .imagePreview {
+  .apercuImage {
     display: none !important;
   }
 }

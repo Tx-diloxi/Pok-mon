@@ -1,10 +1,3 @@
-import pokemon_moves from "./pokemon_moves.js";
-
-import fast_moves from "./fast_moves.js";
-
-import charged_moves from "./charged_moves.js";
-
-//importe les donnees des attaques rapides et chargees
 class Attack {
     static all_attacks = {};
     

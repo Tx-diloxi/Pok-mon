@@ -1,6 +1,3 @@
-import type_effectiveness from "./type_effectiveness.js";
-//importe la table d'efficacite des types
-
 //console.table(type_effectiveness);
 //console.log(type_effectiveness["Fire"]);
 

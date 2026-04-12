@@ -1,7 +1,3 @@
-import Attack from "../data/class_attack.js";
-import Pokemon from "../data/class_pokemon.js";
-import Type from "../data/class_type.js";
-
 //Q1. Fonction getPokemonsByType(typeName) affichant, dans la console, la liste des Pokémons pour un type donné (en argument).
 function getPokemonsByType(typeName){
 

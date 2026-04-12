@@ -164,7 +164,7 @@ table thead th {
   position: relative;
   transition: background-color 0.2s;
 
-  .tri-arrow {
+  .fleche-tri {
     display: inline-block;
     margin-left: 8px;
     font-size: 0.7rem; 
@@ -179,7 +179,7 @@ table thead th {
 }
 
 /* ===== POPUP DE DÉTAILS (INFO CLIQUEE) ===== */
-.popupOverlay {
+.superpositionPopup {
   position: fixed; inset: 0;
   background: rgba(13, 26, 38, 0.8);
   backdrop-filter: blur(12px);
@@ -187,7 +187,7 @@ table thead th {
   z-index: 1000;
 }
 
-.popupCard {
+.cartePopup {
   background: white;
   border-radius: $rayon-popup;
   padding: 40px;
@@ -210,7 +210,7 @@ table thead th {
   &:hover { background: $couleur-pokedex-rouge; color: white; transform: rotate(90deg); }
 }
 
-.popupContent {
+.contenuPopup {
   h2 {
     color: $couleur-pokedex-bleu;
     font-size: 2.8rem;
@@ -239,7 +239,7 @@ table thead th {
     }
   }
 
-  .detailRow {
+  .ligneDetail {
     display: flex;
     justify-content: space-between;
     padding: 14px 0;
@@ -250,9 +250,9 @@ table thead th {
     span { color: $couleur-texte-valeur; font-weight: 800; font-size: 1.1rem; font-family: 'Courier New', monospace;}
   }
 
-  .movesList {
+  .listeMouvements {
     display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;
-    .moveBadge {
+    .badgeMouvement {
       background: white;
       border: 2px solid $couleur-pokedex-jaune;
       padding: 8px 16px;
@@ -266,7 +266,7 @@ table thead th {
 }
 
 /* ===== APERÇU IMAGE (HOVER) - ESSENTIEL POUR LE JS ===== */
-.imagePreview {
+.apercuImage {
   position: fixed;        
   z-index: 1100;          
   pointer-events: none;   
@@ -370,7 +370,7 @@ table thead th {
 
 /* ===== RESPONSIVE POPUP ===== */
 @media (max-width: 768px) {
-  .popupCard {
+  .cartePopup {
     width: 92%;           
     max-width: 95%;
     padding: 20px;        
@@ -379,7 +379,7 @@ table thead th {
     border-radius: 15px;
   }
 
-  .popupContent {
+  .contenuPopup {
     h2 {
       font-size: 1.8rem; 
       padding-left: 12px;
@@ -394,7 +394,7 @@ table thead th {
       }
     }
 
-    .detailRow {
+    .ligneDetail {
       flex-direction: column;
       gap: 5px;
       align-items: flex-start;
@@ -415,7 +415,7 @@ table thead th {
 
 /* ===== RESPONSIVE IMAGE PREVIEW ===== */
 @media (max-width: 1024px) {
-  .imagePreview {
+  .apercuImage {
     display: none !important;
   }
 }
