@@ -5,7 +5,7 @@ class PokemonPartie2 {
 
     constructor() {
         this.pageActuelle = 1; //demarre à la page 1
-        this.nombrePages = 1;
+        this.nombrePages = 1; //par défaut 1 page, calculé 
         this.pokemonsNormaux = []; //tous les pokemons de forme normale
         this.pokemonsFiltres = []; //pokemons après application des filtres
         this.typesNormauxParId = {};
