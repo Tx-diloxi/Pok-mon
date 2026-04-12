@@ -1,4 +1,4 @@
-//class PokemonPartie2 pour la partie 2.
+//classe PokemonPartie2 pour la partie 2.
 class PokemonPartie2 {
     //consigne fix 25 pokemons par page
     static MAX_POKEMON_PAR_PAGE = 25;
