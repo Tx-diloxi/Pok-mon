@@ -24,7 +24,7 @@ class PokemonPartie2 {
         };
     }
 
-    //vu que pas de fichier generation.js on a decide de faire une methode statique 
+    //vu que pas de fichier generation.js on a decide de faire une methode 
     //dans la classe pour determiner la generation d'un pokemon a partir de son id
     static obtenirGeneration(idPokemon) {
         if (idPokemon <= 151) return 'Génération I';
