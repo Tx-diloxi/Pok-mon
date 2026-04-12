@@ -27,6 +27,28 @@
         </header>
 
         <main>
+            <!-- Zone de filtrage -->
+            <section id="zoneFiltre" class="filtreContainer">
+                <div class="filtreGroup">
+                    <label for="filtreType">Type:</label>
+                    <select id="filtreType">
+                        <option value="">-- Aucun filtre --</option>
+                    </select>
+                </div>
+                
+                <div class="filtreGroup">
+                    <label for="filtreAttaque">Attaques rapides:</label>
+                    <select id="filtreAttaque">
+                        <option value="">-- Aucun filtre --</option>
+                    </select>
+                </div>
+                
+                <div class="filtreGroup">
+                    <label for="filtreNom">Nom:</label>
+                    <input type="text" id="filtreNom" placeholder="Chercher un Pokémon..." />
+                </div>
+            </section>
+            
             <section id="conteneurTableau">
                 <table>
                     <thead>

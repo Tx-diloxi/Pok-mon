@@ -3,8 +3,16 @@ const MAX_POKEMON_PAGE = 25;
 let pageActuelle = 1;
 let nombrePages = 1;
 let pokemonsNormaux = [];
+let pokemonsFiltres = [];
 let typesNormauxParId = {};
 let mouvementsNormauxParId = {};
+
+// Variables pour les filtres
+let filtreTypeActuel = '';
+let filtreAttaqueActuel = '';
+let filtreNomActuel = '';
+let tousLesTypesDisponibles = new Set();
+let toutesLesAttaquesRapides = new Set();
 
 //determine la generation a partir de l'id du pokemon
 const obtenirGenerationDepuisId = idPokemon => {
@@ -45,7 +53,25 @@ function initialiserDonnees() {
         .filter(pokemon => pokemon.form === 'Normal')
         .sort((a, b) => a.pokemon_id - b.pokemon_id);
 
-    nombrePages = Math.max(1, Math.ceil(pokemonsNormaux.length / MAX_POKEMON_PAGE));
+    // Extraire les types et attaques disponibles
+    pokemonsNormaux.forEach(pokemon => {
+        const types = typesNormauxParId[pokemon.pokemon_id] || [];
+        types.forEach(type => tousLesTypesDisponibles.add(type));
+        
+        const mouvements = mouvementsNormauxParId[pokemon.pokemon_id] || {};
+        if (mouvements.fast_moves) {
+            mouvements.fast_moves.forEach(move => toutesLesAttaquesRapides.add(move));
+        }
+    });
+
+    // Initialiser les dropdowns
+    peuplerSelectType();
+    peuplerSelectAttaque();
+    
+    // Initialiser les pokemons filtres avec tous les pokemons
+    appliquerFiltres();
+
+    nombrePages = Math.max(1, Math.ceil(pokemonsFiltres.length / MAX_POKEMON_PAGE));
 }
 
 function mettreAJourAffichagePagination() {
@@ -92,19 +118,19 @@ function creerLignePokemon(pokemon) {
 }
 
 function creerTableauPokemons() {
-    //remplit le tbody avec les pokemons de la page courante
+    //remplit le tbody avec les pokemons de la page courante (filtres et pagines)
     const tbody = document.querySelector('tbody');
     if (!tbody) return;
 
     tbody.innerHTML = '';
 
-    if (pokemonsNormaux.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8">Aucun Pokémon \"Normal\" trouvé dans les données.</td></tr>';
+    if (pokemonsFiltres.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8">Aucun Pokémon ne correspond aux filtres.</td></tr>';
         return;
     }
 
     const indexDebut = (pageActuelle - 1) * MAX_POKEMON_PAGE;
-    const pokemonsPage = pokemonsNormaux.slice(indexDebut, indexDebut + MAX_POKEMON_PAGE);
+    const pokemonsPage = pokemonsFiltres.slice(indexDebut, indexDebut + MAX_POKEMON_PAGE);
 
     pokemonsPage.forEach(pokemon => tbody.appendChild(creerLignePokemon(pokemon)));
 }
@@ -254,10 +280,120 @@ function lierEvenementsFermeture() {
     });
 }
 
+// Fonction utilitaire pour normaliser le texte (sans accents, minuscules)
+function normaliserTexte(texte) {
+    //normalise un texte pour la comparaison (pas de casse, pas d'accents)
+    return texte
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase();
+}
+
+// Peupler le select des types
+function peuplerSelectType() {
+    //remplit le select des types avec les types disponibles
+    const selectType = document.getElementById('filtreType');
+    if (!selectType) return;
+    
+    const types = Array.from(tousLesTypesDisponibles).sort();
+    
+    types.forEach(type => {
+        const option = document.createElement('option');
+        option.value = type;
+        option.textContent = type;
+        selectType.appendChild(option);
+    });
+}
+
+// Peupler le select des attaques
+function peuplerSelectAttaque() {
+    //remplit le select des attaques rapides avec les attaques disponibles
+    const selectAttaque = document.getElementById('filtreAttaque');
+    if (!selectAttaque) return;
+    
+    const attaques = Array.from(toutesLesAttaquesRapides).sort();
+    
+    attaques.forEach(attaque => {
+        const option = document.createElement('option');
+        option.value = attaque;
+        option.textContent = attaque;
+        selectAttaque.appendChild(option);
+    });
+}
+
+// Appliquer les filtres et mettre à jour pokemonsFiltres
+function appliquerFiltres() {
+    //applique les filtres selectionnes et met a jour la liste des pokemons affiches
+    pokemonsFiltres = pokemonsNormaux.filter(pokemon => {
+        const types = typesNormauxParId[pokemon.pokemon_id] || [];
+        const mouvements = mouvementsNormauxParId[pokemon.pokemon_id] || {};
+        const attaquesRapides = mouvements.fast_moves || [];
+        
+        // Filtre Type
+        if (filtreTypeActuel !== '' && !types.includes(filtreTypeActuel)) {
+            return false;
+        }
+        
+        // Filtre Attaques rapides
+        if (filtreAttaqueActuel !== '' && !attaquesRapides.includes(filtreAttaqueActuel)) {
+            return false;
+        }
+        
+        // Filtre Nom (sans accents, sans casse)
+        if (filtreNomActuel !== '') {
+            const nomNormalise = normaliserTexte(pokemon.pokemon_name);
+            const rechercheNormalisee = normaliserTexte(filtreNomActuel);
+            if (!nomNormalise.includes(rechercheNormalisee)) {
+                return false;
+            }
+        }
+        
+        return true;
+    });
+    
+    // Réinitialiser la pagination à la page 1
+    pageActuelle = 1;
+    nombrePages = Math.max(1, Math.ceil(pokemonsFiltres.length / MAX_POKEMON_PAGE));
+    
+    // Mettre à jour l'affichage
+    creerTableauPokemons();
+    mettreAJourAffichagePagination();
+}
+
+// Lier les événements des filtres
+function lierEvenementsFiltre() {
+    //lie les evenements pour les controles de filtrage
+    const selectType = document.getElementById('filtreType');
+    const selectAttaque = document.getElementById('filtreAttaque');
+    const inputNom = document.getElementById('filtreNom');
+    
+    if (selectType) {
+        selectType.addEventListener('change', (e) => {
+            filtreTypeActuel = e.target.value;
+            appliquerFiltres();
+        });
+    }
+    
+    if (selectAttaque) {
+        selectAttaque.addEventListener('change', (e) => {
+            filtreAttaqueActuel = e.target.value;
+            appliquerFiltres();
+        });
+    }
+    
+    if (inputNom) {
+        inputNom.addEventListener('input', (e) => {
+            filtreNomActuel = e.target.value;
+            appliquerFiltres();
+        });
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     //initialise l'app une fois le DOM charge
     initialiserDonnees();
     lierEvenementsPagination();
     lierEvenementsFermeture();
+    lierEvenementsFiltre();
     allerAUnePage(1);
 });
