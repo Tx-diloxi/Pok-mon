@@ -19,7 +19,7 @@ class PokemonPartie2 {
         this.toutesLesAttaquesRapides = [];
 
         this.triActuel = {
-            colonne: null, // ID de la colonne (ex: 'pokemon_id', 'pokemon_name')
+            colonne: null, // ID de la colonne (ex: 'idPokemon', 'nom')
             direction: 1   // 1 pour croissant, -1 pour décroissant
         };
     }
@@ -53,64 +53,40 @@ class PokemonPartie2 {
 
     //initialise les tableaux pour l'affichage et les données
     initialiser() {
-        //recup tous les pokemons normaux et les trie par ID
-        this.pokemonsNormaux = pokemons
-            .filter(pokemon => pokemon.form == 'Normal')
-            .sort((a, b) => a.pokemon_id - b.pokemon_id);
+        this.pokemonsNormaux = Object.values(Pokemon.all_pokemons)
+            .sort((a, b) => a.idPokemon - b.idPokemon);
 
-        //peuple les tableaux de types et mouvements pour chaque Pokémon
         this.pokemonsNormaux.forEach(pokemon => {
-            const types = pokemon_types
-                .find(p => p.pokemon_id == pokemon.pokemon_id && p.form == 'Normal');
+            const types = pokemon.getTypes().map(type => type.nom);
+            const mouvements = {
+                fast_moves: Array.isArray(pokemon.nomAttaqueRapides) ? pokemon.nomAttaqueRapides : [],
+                charged_moves: Array.isArray(pokemon.nomAttaqueChargees) ? pokemon.nomAttaqueChargees : []
+            };
 
-            const mouvements = pokemon_moves
-                .find(p => p.pokemon_id == pokemon.pokemon_id && p.form == 'Normal');
-            
-            if (types) {
-                this.typesNormauxParId[pokemon.pokemon_id] = types.type;
-            }
-            if (mouvements) {
-                this.mouvementsNormauxParId[pokemon.pokemon_id] = {
-                    fast_moves: mouvements.fast_moves,
-                    charged_moves: mouvements.charged_moves,
-                    elite_fast_moves: mouvements.elite_fast_moves,
-                    elite_charged_moves: mouvements.elite_charged_moves
-                };
-            }
-        });
+            this.typesNormauxParId[pokemon.idPokemon] = types;
+            this.mouvementsNormauxParId[pokemon.idPokemon] = mouvements;
 
-        //peuple les tableaux de types et attaques disponibles
-        this.pokemonsNormaux.forEach(pokemon => {
-            const types = this.typesNormauxParId[pokemon.pokemon_id];
-
-            //ajout des types à la liste des types disponibles
             types.forEach(type => {
                 if (!this.tousLesTypesDisponibles.includes(type)) {
                     this.tousLesTypesDisponibles.push(type);
                 }
             });
-            
-            //ajout des attaques rapides à la liste des attaques disponibles
-            const mouvements = this.mouvementsNormauxParId[pokemon.pokemon_id];
-            if (mouvements.fast_moves) {
-                mouvements.fast_moves.forEach(move => {
-                    if (!this.toutesLesAttaquesRapides.includes(move)) {
-                        this.toutesLesAttaquesRapides.push(move);
-                    }
-                });
-            }
+
+            mouvements.fast_moves.forEach(move => {
+                if (!this.toutesLesAttaquesRapides.includes(move)) {
+                    this.toutesLesAttaquesRapides.push(move);
+                }
+            });
         });
 
-        //initialise les filtres et l'affichage
         this.peuplerSelectType();
         this.peuplerSelectAttaque();
-        this.appliquerFiltres();
         this.lierEvenementsPagination();
         this.lierEvenementsFermeture();
         this.lierEvenementsFiltre();
-        this.allerAUnePage(1);
-
         this.lierEvenementsTri();
+
+        this.appliquerFiltres();
         this.allerAUnePage(1);
     }
 
@@ -118,12 +94,12 @@ class PokemonPartie2 {
     lierEvenementsTri() {
         const gestionnaire = this;
         const correspondanceColonnes = [
-            'pokemon_id', 
-            'pokemon_name', 
+            'idPokemon', 
+            'nom', 
             'generation', 
             'types', 
-            'base_stamina', 
-            'base_attack', 
+            'stamina', 
+            'base_attaque', 
             'base_defense'
         ];
 
@@ -166,23 +142,21 @@ class PokemonPartie2 {
 
             //extraction des valeurs selon le critère
             if (critere == 'types') {
-                valeurA = (this.typesNormauxParId[a.pokemon_id] || []).join('');
-                valeurB = (this.typesNormauxParId[b.pokemon_id] || []).join('');
+                valeurA = (this.typesNormauxParId[a.idPokemon] || []).join('');
+                valeurB = (this.typesNormauxParId[b.idPokemon] || []).join('');
             } else if (critere == 'generation') {
-                valeurA = PokemonPartie2.obtenirGeneration(a.pokemon_id);
-                valeurB = PokemonPartie2.obtenirGeneration(b.pokemon_id);
+                valeurA = PokemonPartie2.obtenirGeneration(a.idPokemon);
+                valeurB = PokemonPartie2.obtenirGeneration(b.idPokemon);
             } else {
                 valeurA = a[critere];
                 valeurB = b[critere];
             }
 
-            //comparaison des valeurs pour le tri
             if (valeurA < valeurB) return -1 * this.triActuel.direction;
             if (valeurA > valeurB) return 1 * this.triActuel.direction;
 
-            //si egale, on trie par nom selon les consignes
-            if (a.pokemon_name < b.pokemon_name) return -1;
-            if (a.pokemon_name > b.pokemon_name) return 1;
+            if (a.nom < b.nom) return -1;
+            if (a.nom > b.nom) return 1;
             
             return 0;
         });
@@ -207,25 +181,20 @@ class PokemonPartie2 {
 
     //construit une ligne de tableau pour un pokemon donné
     creerLignePokemon(pokemon) {
-        //recup les types du pokemon pour l'affichage
-        const types = this.typesNormauxParId[pokemon.pokemon_id];
-        //recup l'id du pokemon pour construire le chemin de l'image
-        const idImage = String(pokemon.pokemon_id).padStart(3, '0');
-        //construit le chemin de l'image avec idImage
+        const types = this.typesNormauxParId[pokemon.idPokemon];
+        const idImage = String(pokemon.idPokemon).padStart(3, '0');
         const sourceImage = `webp/images/${idImage}.webp`;
-        
-        //construit la ligne du tableau avec les données du pokemon et l'image
         const tr = $('<tr>')
-            .data('pokemonId', pokemon.pokemon_id)
+            .data('pokemonId', pokemon.idPokemon)
             .html(`
-                <td>${pokemon.pokemon_id}</td>
-                <td>${pokemon.pokemon_name}</td>
-                <td>${PokemonPartie2.obtenirGeneration(pokemon.pokemon_id)}</td>
+                <td>${pokemon.idPokemon}</td>
+                <td>${pokemon.nom}</td>
+                <td>${PokemonPartie2.obtenirGeneration(pokemon.idPokemon)}</td>
                 <td>${PokemonPartie2.formaterTypes(types)}</td>
-                <td>${pokemon.base_stamina}</td>
-                <td>${pokemon.base_attack}</td>
+                <td>${pokemon.stamina}</td>
+                <td>${pokemon.base_attaque}</td>
                 <td>${pokemon.base_defense}</td>
-                <td><img src="${sourceImage}" alt="${pokemon.pokemon_name}" loading="lazy" class="pokemonThumbnail" data-pokemon-id="${pokemon.pokemon_id}" data-pokemon-name="${pokemon.pokemon_name}"></td>
+                <td><img src="${sourceImage}" alt="${pokemon.nom}" loading="lazy" class="pokemonThumbnail" data-pokemon-id="${pokemon.idPokemon}" data-pokemon-name="${pokemon.nom}"></td>
             `);
 
         //si clique sur la ligne, affiche le popup du pokemon
@@ -233,7 +202,7 @@ class PokemonPartie2 {
 
         //si survole l'image, affiche un aperçu sur la miniature
         const img = tr.find('.pokemonThumbnail');
-        img.on('mouseenter', (e) => this.afficherAperçuImage(e, sourceImage, pokemon.pokemon_name));
+        img.on('mouseenter', (e) => this.afficherAperçuImage(e, sourceImage, pokemon.nom));
         img.on('mouseleave', () => this.masquerAperçuImage());
 
         return tr;
@@ -277,17 +246,15 @@ class PokemonPartie2 {
 
     //construit et affiche le popup de détails pour un pokemon donné
     afficherPopupDetails(pokemon) {
-        //recup les types du pokemon
-        const types = this.typesNormauxParId[pokemon.pokemon_id];
-        //recup les mouvements du pokemon
-        const mouvements = this.mouvementsNormauxParId[pokemon.pokemon_id];
+        const types = pokemon.getTypes().map(type => type.nom);
+        const mouvements = {
+            fast_moves: Array.isArray(pokemon.nomAttaqueRapides) ? pokemon.nomAttaqueRapides : [],
+            charged_moves: Array.isArray(pokemon.nomAttaqueChargees) ? pokemon.nomAttaqueChargees : []
+        };
 
-        //cree le contenu pour les mouvements
         let contenuMouvements = '';
         
-        //si le pokemon a des attaques rapides, ajoute une section pour les afficher
-        if (mouvements.fast_moves && mouvements.fast_moves.length > 0) {
-            //ajoute le contenu des attaques rapides avec des badges pour chaque attaque
+        if (mouvements.fast_moves.length > 0) {
             contenuMouvements += `
                 <div class="detailSection">
                     <h3>Attaques rapides</h3>
@@ -298,9 +265,7 @@ class PokemonPartie2 {
             `;
         }
         
-        //si le pokemon a des attaques chargées, ajoute une section pour les afficher
-        if (mouvements.charged_moves && mouvements.charged_moves.length > 0) {
-            //ajoute le contenu des attaques chargées avec des badges pour chaque attaque
+        if (mouvements.charged_moves.length > 0) {
             contenuMouvements += `
                 <div class="detailSection">
                     <h3>Attaques chargées</h3>
@@ -311,17 +276,16 @@ class PokemonPartie2 {
             `;
         }
 
-        //construit la popup avec les détails du pokemon, ses types, ses stats et ses mouvements
         const htmlPopup = `
-            <h2>${pokemon.pokemon_name}</h2>
+            <h2>${pokemon.nom}</h2>
             <div class="detailSection">
                 <div class="ligneDetail">
                     <strong>ID:</strong>
-                    <span>${pokemon.pokemon_id}</span>
+                    <span>${pokemon.idPokemon}</span>
                 </div>
                 <div class="ligneDetail">
                     <strong>Génération:</strong>
-                    <span>${PokemonPartie2.obtenirGeneration(pokemon.pokemon_id)}</span>
+                    <span>${PokemonPartie2.obtenirGeneration(pokemon.idPokemon)}</span>
                 </div>
                 <div class="ligneDetail">
                     <strong>Types:</strong>
@@ -331,11 +295,11 @@ class PokemonPartie2 {
             <div class="detailSection">
                 <div class="ligneDetail">
                     <strong>Endurance:</strong>
-                    <span>${pokemon.base_stamina}</span>
+                    <span>${pokemon.stamina}</span>
                 </div>
                 <div class="ligneDetail">
                     <strong>Attaque de base:</strong>
-                    <span>${pokemon.base_attack}</span>
+                    <span>${pokemon.base_attaque}</span>
                 </div>
                 <div class="ligneDetail">
                     <strong>Défense de base:</strong>
@@ -431,32 +395,22 @@ class PokemonPartie2 {
 
     //applique les filtres sélectionnés et maj la liste des Pokémons affichés
     appliquerFiltres() {
-        //filtre les pokemons normaux selon les critères
         this.pokemonsFiltres = this.pokemonsNormaux.filter(pokemon => {
-            //recup les types pour appliquer les filtres
-            const types = this.typesNormauxParId[pokemon.pokemon_id];
-            //recup les mouvements pour appliquer les filtres
-            const mouvements = this.mouvementsNormauxParId[pokemon.pokemon_id];
-            //recup les attaques rapides pour appliquer les filtres
-            const attaquesRapides = mouvements.fast_moves;
+            const types = this.typesNormauxParId[pokemon.idPokemon] || [];
+            const mouvements = this.mouvementsNormauxParId[pokemon.idPokemon] || { fast_moves: [], charged_moves: [] };
+            const attaquesRapides = mouvements.fast_moves || [];
             
-            //si le filtre de type est sélectionné et que le pokemon n'a pas ce type, on exclut le pokemon
             if (this.filtreTypeActuel !== '' && !types.includes(this.filtreTypeActuel)) {
                 return false;
             }
             
-            //si le filtre d'attaque rapide est sélectionné et que le pokemon n'a pas cette attaque rapide, on exclut le pokemon
             if (this.filtreAttaqueActuel !== '' && !attaquesRapides.includes(this.filtreAttaqueActuel)) {
                 return false;
             }
             
-            //si le filtre de nom est rempli et que le nom du pokemon ne contient pas le texte recherché, on exclut le pokemon
             if (this.filtreNomActuel !== '') {
-                //normalise le nom du pokemon
-                const nomNormalise = PokemonPartie2.normaliserTexte(pokemon.pokemon_name);
-                //normalise le texte de recherche
+                const nomNormalise = PokemonPartie2.normaliserTexte(pokemon.nom);
                 const rechercheNormalisee = PokemonPartie2.normaliserTexte(this.filtreNomActuel);
-                //si le nom normalisé du pokemon ne contient pas le texte de recherche normalisé, on exclut le pokemon
                 if (!nomNormalise.includes(rechercheNormalisee)) {
                     return false;
                 }
